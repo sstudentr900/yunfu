@@ -40,11 +40,11 @@
           <div class="text-main text-2xl font-normal leading-normal">服務項目</div>
           <div class="justify-center text-neutral-800 text-7xl font-bold customFont2 uppercase">Services</div>
         </div>
-        <div class="flex justify-start items-start gap-8">
+        <div class="flex justify-start items-start gap-12">
           <div class="flex-1">
             <img src="{{url('/images/indexservices01.png')}}" alt="">
           </div>
-          <div class="flex-3 grid grid-cols-2 gap-6">
+          <div class="flex-2 grid grid-cols-2 gap-8">
             <div class="">
               <div class="flex items-end mb-4">
                 <div class="text-main text-5xl font-bold">01</div>
