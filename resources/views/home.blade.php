@@ -33,41 +33,60 @@
       </div>
     </div>
     <div class="flex-1">
+      <!-- ad   -->
       <!-- services -->
-      <div>
-        <div class="inline-flex flex-col justify-start items-start">
+      <div class="pr-8">
+        <div class="inline-flex flex-col justify-start items-start mb-4">
           <div class="text-main text-2xl font-normal leading-normal">服務項目</div>
           <div class="justify-center text-neutral-800 text-7xl font-bold customFont2 uppercase">Services</div>
         </div>
-        <div class="flex justify-start items-start gap-4">
+        <div class="flex justify-start items-start gap-8">
           <div class="flex-1">
             <img src="{{url('/images/indexservices01.png')}}" alt="">
           </div>
-          <div class="flex-3">
+          <div class="flex-3 grid grid-cols-2 gap-6">
             <div class="">
-              <div class="flex">
-                <div class="justify-center text-stone-400 text-5xl font-bold">01</div>
-                <div class="justify-center text-neutral-800 text-2xl font-bold font-['DM_Sans'] uppercase leading-3 tracking-tight">室內(空間)規劃</div>
+              <div class="flex items-end mb-4">
+                <div class="text-main text-5xl font-bold">01</div>
+                <div class="text-neutral-800 text-2xl font-bold">室內(空間)規劃</div>
               </div>
-              <div class="w-80 left-[694px] top-[2517px] absolute text-justify justify-center text-neutral-500 text-lg font-medium font-['DM_Sans'] uppercase leading-7 tracking-tight">居家設計講求健康、幸福、風格、自我特色，我們替客戶把關，選擇安心材料、符合業主的使用，讓空間意象認知與傳達，更趨近於需求，設計一個屬於自己或家庭的生活空間。</div>
+              <div class="text-justify text-neutral-500 text-lg font-medium">居家設計講求健康、幸福、風格、自我特色，我們替客戶把關，選擇安心材料、符合業主的使用，讓空間意象認知與傳達，更趨近於需求，設計一個屬於自己或家庭的生活空間。</div>
             </div>
-            <div class="left-[1155px] top-[2758px] absolute justify-center text-neutral-800 text-2xl font-bold font-['DM_Sans'] uppercase leading-3 tracking-tight">老屋重建</div>
-            <div class="w-80 left-[1074px] top-[2789px] absolute text-justify justify-center text-neutral-500 text-lg font-medium font-['DM_Sans'] uppercase leading-7 tracking-tight">老屋，是時間留下的痕跡，也是情感的承載。我們致力於老屋重建，透過專業設計與施工，讓空間重新煥發新生命。從格局調整、水電更新，到耐震安全，每一步都為您的生活品質把關。</div>
-            <div class="left-[1074px] top-[2737px] absolute justify-center text-stone-400 text-5xl font-bold font-['DM_Sans'] uppercase leading-10 tracking-wide">04</div>
-            <div class="left-[768px] top-[3032px] absolute justify-center text-neutral-800 text-2xl font-bold font-['DM_Sans'] uppercase leading-3 tracking-tight">老屋翻修</div>
-            <div class="w-80 left-[694px] top-[3061px] absolute text-justify justify-center text-neutral-500 text-lg font-medium font-['DM_Sans'] uppercase leading-7 tracking-tight">老屋不舊，只是等待一次重新出發的機會。從改善採光、更新水電、優化動線到風格設計，重新為生活注入溫度與質感。讓每一段回憶延續下去，同時擁有全新的空間體驗。</div>
-            <div class="left-[694px] top-[3009px] absolute justify-center text-stone-400 text-5xl font-bold font-['DM_Sans'] uppercase leading-10 tracking-wide">05</div>
-            <div class="left-[1150px] top-[3031px] absolute justify-center text-neutral-800 text-2xl font-bold font-['DM_Sans'] uppercase leading-3 tracking-tight">老屋修繕</div>
-            <div class="w-80 left-[1074px] top-[3061px] absolute text-justify justify-center text-neutral-500 text-lg font-medium font-['DM_Sans'] uppercase leading-7 tracking-tight">屋子住久了，總有需要補修的地方。我們提供從屋頂到地板的老屋修繕服務，包括防水抓漏、電線汰換、牆壁重作、磁磚更換等，依照現場狀況提供最適合的修繕方案。</div>
-            <div class="left-[1074px] top-[3009px] absolute justify-center text-stone-400 text-5xl font-bold font-['DM_Sans'] uppercase leading-10 tracking-wide">06</div>
-            <div class="left-[767px] top-[2757px] absolute justify-center text-neutral-800 text-2xl font-bold font-['DM_Sans'] uppercase leading-3 tracking-tight">專屬客製化</div>
-            <div class="w-80 left-[694px] top-[2789px] absolute text-justify justify-center text-neutral-500 text-lg font-medium font-['DM_Sans'] uppercase leading-7 tracking-tight">每個人對家的想像都不同，我們用心傾聽，依照你的生活習慣、喜好風格與預算，打造專屬的空間提案。從設計到施工，全程客製化調整，只為呈現屬於你的理想生活樣貌。</div>
-            <div class="left-[694px] top-[2737px] absolute justify-center text-stone-400 text-5xl font-bold font-['DM_Sans'] uppercase leading-10 tracking-wide">03</div>
-            <div class="left-[1150px] top-[2486px] absolute justify-center text-neutral-800 text-2xl font-bold font-['DM_Sans'] uppercase leading-3 tracking-tight">商辦設計</div>
-            <div class="w-80 left-[1074px] top-[2517px] absolute text-justify justify-center text-neutral-500 text-lg font-medium font-['DM_Sans'] uppercase leading-7 tracking-tight">一個好的辦公空間，不只體現企業形象，更能展現專業與信賴感。我們提供全方位的商辦設計，從接待區、辦公區到會議室、主管室，依據企業量身打造，塑造高效與具識別度的空間風貌。</div>
-            <div class="left-[1074px] top-[2465px] absolute justify-center text-stone-400 text-5xl font-bold font-['DM_Sans'] uppercase leading-10 tracking-wide">02</div>
-
-            <div class="w-96 h-[500px] left-[251px] top-[2465px] absolute bg-neutral-500"></div>
+            <div class="">
+              <div class="flex items-end mb-4">
+                <div class="text-main text-5xl font-bold">02</div>
+                <div class="text-neutral-800 text-2xl font-bold">商辦設計</div>
+              </div>
+              <div class="text-justify text-neutral-500 text-lg font-medium">一個好的辦公空間，不只體現企業形象，更能展現專業與信賴感。我們提供全方位的商辦設計，從接待區、辦公區到會議室、主管室，依據企業量身打造，塑造高效與具識別度的空間風貌。</div>
+            </div>
+            <div class="">
+              <div class="flex items-end mb-4">
+                <div class="text-main text-5xl font-bold">03</div>
+                <div class="text-neutral-800 text-2xl font-bold">專屬客製化</div>
+              </div>
+              <div class="text-justify text-neutral-500 text-lg font-medium">每個人對家的想像都不同，我們用心傾聽，依照你的生活習慣、喜好風格與預算，打造專屬的空間提案。從設計到施工，全程客製化調整，只為呈現屬於你的理想生活樣貌。</div>
+            </div>
+            <div class="">
+              <div class="flex items-end mb-4">
+                <div class="text-main text-5xl font-bold">04</div>
+                <div class="text-neutral-800 text-2xl font-bold">老屋重建</div>
+              </div>
+              <div class="text-justify text-neutral-500 text-lg font-medium">老屋，是時間留下的痕跡，也是情感的承載。我們致力於老屋重建，透過專業設計與施工，讓空間重新煥發新生命。從格局調整、水電更新，到耐震安全，每一步都為您的生活品質把關。</div>
+            </div>
+            <div class="">
+              <div class="flex items-end mb-4">
+                <div class="text-main text-5xl font-bold">05</div>
+                <div class="text-neutral-800 text-2xl font-bold">老屋翻修</div>
+              </div>
+              <div class="text-justify text-neutral-500 text-lg font-medium">老屋不舊，只是等待一次重新出發的機會。從改善採光、更新水電、優化動線到風格設計，重新為生活注入溫度與質感。讓每一段回憶延續下去，同時擁有全新的空間體驗。</div>
+            </div>
+            <div class="">
+              <div class="flex items-end mb-4">
+                <div class="text-main text-5xl font-bold">06</div>
+                <div class="text-neutral-800 text-2xl font-bold">老屋修繕</div>
+              </div>
+              <div class="text-justify text-neutral-500 text-lg font-medium">屋子住久了，總有需要補修的地方。我們提供從屋頂到地板的老屋修繕服務，包括防水抓漏、電線汰換、牆壁重作、磁磚更換等，依照現場狀況提供最適合的修繕方案。</div>
+            </div>
           </div>
         </div>
       </div>
@@ -75,7 +94,7 @@
       <div class="flex flex-col pr-8">
         <div class="flex justify-between items-center mb-4">
           <div class="inline-flex flex-col justify-start items-start">
-            <div class="mainColor justify-center text-2xl font-normal leading-normal tracking-wide">精選作品</div>
+            <div class="text-main justify-center text-2xl font-normal leading-normal tracking-wide">精選作品</div>
             <div class="justify-center text-neutral-800 text-7xl font-bold customFont2 uppercase">work</div>
           </div>
           <a href="#" class="mainbutton w-fit px-16 py-3 rounded-[999px] gap-2 text-white text-2xl font-normal max-md:text-base">
@@ -126,7 +145,7 @@
             <br>
             訂製專屬你的宅邸
           </div>
-          <a href="#" class="mainbutton w-fit px-16 py-3 rounded-[999px] gap-2 text-white text-2xl font-normal max-md:text-base">
+          <a href="#" class="bg-main w-fit px-16 py-3 rounded-[999px] gap-2 text-white text-2xl font-normal hover:bg-main-hover max-md:text-base">
             立即諮詢
           </a>
         </div>
