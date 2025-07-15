@@ -5,8 +5,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <meta name="description" content="" />
+  <meta name="author" content="" />
   <title>耘馥設計</title>
-
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +20,7 @@
   <div class="bg-white w-full h-auto flex 2xl:justify-center">
     <div class="relative flex 2xl:w-[1536px] max-lg:flex-col">
       <div class="flex-none z-999 w-[255px] max-xl:w-[222px] max-lg:h-[129px] ">
-        <div class="fixed left-0 h-full px-8 bg-white flex flex-col items-center max-xl:pl-0 max-lg:p-0 max-lg:flex-row max-lg:h-auto max-lg:bg-main max-lg:justify-between max-lg:w-full max-lg:px-8 max-lg:p-2 border-b-1 border-white/60">
+        <div class="fixed h-full px-8 bg-white flex flex-col items-center max-xl:pl-0 max-lg:left-0 max-lg:p-0 max-lg:flex-row max-lg:h-auto max-lg:bg-main max-lg:justify-between max-lg:w-full max-lg:px-8 max-lg:p-2 border-b-1 border-white/60">
           <div class="w-[190px] h-[180px] bg-main flex justify-center items-center max-lg:max-w-[82px] max-lg:h-[120px] ">
             <img src="{{url('/images/logo.svg')}}" alt="">
           </div>
@@ -34,8 +36,8 @@
       </div>
       <div class="flex-1">
         <!-- Carousel -->
-        <div class="md:mb-18 max-md:mb-8">
-          <img class="w-full object-cover" src="{{url('/images/indexcarousel01.png')}}" alt="">
+        <div class="max-h-120 overflow-hidden md:mb-18 max-md:mb-8">
+          <img class="w-full object-center" src="{{url('/images/indexcarousel01.png')}}" alt="">
         </div>
         <!-- company -->
         <div class="md:pr-8 flex m-auto jusify-center gap-8 -mb-18 max-lg:px-4  max-md:flex-col max-md:max-w-[580px] max-md:mb-8 max-sm:gap-4">
@@ -139,13 +141,13 @@
           </div>
         </div>
         <!-- work -->
-        <div class="flex flex-col pr-8">
+        <div class="flex flex-col pr-8 max-lg:px-8 max-md:px-4">
           <div class="flex justify-between items-center mb-4">
             <div class="inline-flex flex-col justify-start items-start">
-              <div class="text-main justify-center text-2xl">精選作品</div>
-              <div class="justify-center text-neutral-800 text-7xl font-bold customFont2 uppercase">work</div>
+              <div class="text-main justify-center text-2xl max-md:text-lg">精選作品</div>
+              <div class="justify-center text-neutral-800 text-7xl font-bold customFont2 uppercase max-sm:text-4xl">work</div>
             </div>
-            <a href="#" class="mainbutton w-fit px-16 py-3 rounded-[999px] gap-2 text-white text-2xl max-md:text-base">
+            <a href="#" class="bg-main w-fit px-16 py-3 rounded-[999px] gap-2 text-white text-2xl font-normal hover:bg-main-hover max-md:text-base max-md:px-8 max-md:py-2">
               了解更多
             </a>
           </div>
