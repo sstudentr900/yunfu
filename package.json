@@ -12,7 +12,9 @@
         "vite": "^5.0"
     },
     "dependencies": {
-        "@tailwindcss/vite": "^4.1.11"
+        "@tailwindcss/vite": "^4.1.11",
+        "jquery": "^3.7.1",
+        "slick-carousel": "^1.8.1"
     },
     "name": "yunfu",
     "version": "1.0.0",

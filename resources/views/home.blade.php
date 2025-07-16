@@ -13,12 +13,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Chiron+Hei+HK:ital,wght@0,200..900;1,200..900&family=Chiron+Sung+HK:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-  @vite('resources/css/app.css')
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
+  <!-- slick -->
+  <!-- <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.css" /> -->
 </head>
 
 <body>
   <div class="bg-white w-full h-auto flex 2xl:justify-center">
-    <div class="relative flex 2xl:w-[1536px] max-lg:flex-col">
+    <div class="relative flex 2xl:w-[1920px] max-lg:flex-col">
       <div class="flex-none z-999 w-[255px] max-xl:w-[222px] max-lg:h-[129px] ">
         <div class="fixed h-full px-8 bg-white flex flex-col items-center max-xl:pl-0 max-lg:left-0 max-lg:p-0 max-lg:flex-row max-lg:h-auto max-lg:bg-main max-lg:justify-between max-lg:w-full max-lg:px-8 max-lg:p-2 border-b-1 border-white/60">
           <div class="w-[190px] h-[180px] bg-main flex justify-center items-center max-lg:max-w-[82px] max-lg:h-[120px] ">
@@ -34,15 +36,17 @@
           </div>
         </div>
       </div>
-      <div class="flex-1">
+      <div class="flex-1 w-[calc(1920px-15px-255px)] max-[1920px]:w-[calc(100vw-15px-255px)] max-2xl:w-[calc(100vw-15px-255px)] max-xl:w-[calc(100vw-15px-222px)] max-lg:w-[calc(100vw-15px)]">
         <!-- Carousel -->
-        <div class="max-h-120 overflow-hidden md:mb-18 max-md:mb-8">
-          <img class="w-full object-center" src="{{url('/images/indexcarousel01.png')}}" alt="">
+        <div class="homeSlick1 md:mb-18 max-md:mb-8">
+          <div><img class="w-full object-center" src="{{url('/images/indexcarousel01.png')}}" alt=""></div>
+          <div><img class="w-full object-center" src="{{url('/images/indexcarousel02.png')}}" alt=""></div>
+          <div><img class="w-full object-center" src="{{url('/images/indexcarousel03.png')}}" alt=""></div>
         </div>
         <!-- company -->
-        <div class="md:pr-8 flex m-auto jusify-center gap-8 -mb-18 max-lg:px-4  max-md:flex-col max-md:max-w-[580px] max-md:mb-8 max-sm:gap-4">
+        <div class="flex m-auto jusify-center gap-8 -mb-18 max-w-7xl md:px-8 max-lg:px-4 max-md:flex-col max-md:max-w-[580px] max-md:mb-8 max-sm:gap-4">
           <div class="flex-1 flex md:justify-center gap-4">
-            <div class="max-w-[380px] flex flex-col">
+            <div class="max-w-[380px] flex flex-col mt-8">
               <div class="text-main text-2xl max-md:text-base">公司介紹</div>
               <div class="text-neutral-800 customFont2 text-7xl font-bold mb-4 max-sm:text-5xl">
                 家的溫度
@@ -55,7 +59,7 @@
               <a href="#" class="bg-main w-fit px-16 py-3 rounded-[999px] gap-2 text-white text-2xl hover:bg-main-hover max-md:text-base max-md:px-8 max-md:py-2">了解更多</a>
             </div>
           </div>
-          <div class="max-lg:flex max-lg:justify-end">
+          <div class="max-lg:flex max-lg:justify-end card">
             <img class="max-w-[390px] w-full" src="{{url('/images/indexcompany01.png')}}" alt="">
           </div>
         </div>
@@ -68,7 +72,7 @@
             <div class="md:absolute md:-bottom-4 md:-left-4 flex justify-center items-end bg-white py-2 px-4 max-md:mb-4 max-md:-mt-40 max-md:mx-8 max-sm:mx-4">
               <span class="text-main text-7xl font-bold max-md:text-6xl">8.8</span>
               <span class="text-main text-6xl font-bold customFont2 max-md:text-6xl">萬</span>
-              <span class="flex items-center justify-center text-white text-xs font-bold rounded-[999px] bg-neutral-800 p-2 w-6 h-6 -ml-4 max-md:-ml-3">起</span>
+              <span class="flex items-center justify-center text-white text-xs font-bold rounded-[999px] bg-neutral-800 p-2 w-6 h-6 -ml-3 max-md:-ml-2">起</span>
             </div>
             <div class="flex-1 max-w-[480px] flex flex-col p-8 bg-white md:-ml-8 max-md:mx-8 max-sm:max-w-[340px] max-sm:mx-4 max-sm:p-4">
               <div class="text-main text-2xl max-md:text-base">名額有限X限時優惠X錯過不再</div>
@@ -85,7 +89,7 @@
           </div>
         </div>
         <!-- services -->
-        <div class="mb-18 pr-8 relative max-md:px-4 max-md:mb-8 max-sm:pl-0">
+        <div class="m-auto mb-18 pr-8 relative max-w-7xl max-md:px-4 max-md:mb-8 max-sm:pl-0">
           <div class="inline-flex flex-col justify-start items-start mb-4 max-lg:items-end max-lg:absolute max-lg:bg-white max-lg:right-8 max-lg:top-8">
             <div class="text-main text-2xl max-md:text-lg">服務項目</div>
             <div class="justify-center text-neutral-800 text-7xl font-bold customFont2 uppercase max-sm:text-4xl">Services</div>
@@ -96,42 +100,42 @@
             </div>
             <div class="flex-2 grid grid-cols-2 gap-10 max-lg:bg-white/70 max-lg:p-4 max-lg:-mt-24 max-lg:ml-8 max-md:-mt-40 max-md:ml-4 max-md:grid-cols-1 max-md:gap-8">
               <div class="">
-                <div class="flex items-end mb-4 max-md:mb-1">
+                <div class="flex items-end mb-4 gap-1 max-md:mb-1">
                   <div class="text-main text-5xl font-bold max-md:text-4xl">01</div>
                   <div class="text-neutral-800 text-2xl font-bold max-md:text-xl">室內(空間)規劃</div>
                 </div>
                 <div class="text-justify text-neutral-500 text-lg max-md:text-sm">居家設計講求健康、幸福、風格、自我特色，我們替客戶把關，選擇安心材料、符合業主的使用，讓空間意象認知與傳達，更趨近於需求，設計一個屬於自己或家庭的生活空間。</div>
               </div>
               <div class="">
-                <div class="flex items-end mb-4 max-md:mb-1">
+                <div class="flex items-end mb-4 gap-1 max-md:mb-1">
                   <div class="text-main text-5xl font-bold max-md:text-4xl">02</div>
                   <div class="text-neutral-800 text-2xl font-bold max-md:text-xl">商辦設計</div>
                 </div>
                 <div class="text-justify text-neutral-500 text-lg max-md:text-sm">一個好的辦公空間，不只體現企業形象，更能展現專業與信賴感。我們提供全方位的商辦設計，從接待區、辦公區到會議室、主管室，依據企業量身打造，塑造高效與具識別度的空間風貌。</div>
               </div>
               <div class="">
-                <div class="flex items-end mb-4 max-md:mb-1">
+                <div class="flex items-end mb-4 gap-1 max-md:mb-1">
                   <div class="text-main text-5xl font-bold max-md:text-4xl">03</div>
                   <div class="text-neutral-800 text-2xl font-bold max-md:text-xl">專屬客製化</div>
                 </div>
                 <div class="text-justify text-neutral-500 text-lg max-md:text-sm">每個人對家的想像都不同，我們用心傾聽，依照你的生活習慣、喜好風格與預算，打造專屬的空間提案。從設計到施工，全程客製化調整，只為呈現屬於你的理想生活樣貌。</div>
               </div>
               <div class="">
-                <div class="flex items-end mb-4 max-md:mb-1">
+                <div class="flex items-end mb-4 gap-1 max-md:mb-1">
                   <div class="text-main text-5xl font-bold max-md:text-4xl">04</div>
                   <div class="text-neutral-800 text-2xl font-bold max-md:text-xl">老屋重建</div>
                 </div>
                 <div class="text-justify text-neutral-500 text-lg max-md:text-sm">老屋，是時間留下的痕跡，也是情感的承載。我們致力於老屋重建，透過專業設計與施工，讓空間重新煥發新生命。從格局調整、水電更新，到耐震安全，每一步都為您的生活品質把關。</div>
               </div>
               <div class="">
-                <div class="flex items-end mb-4 max-md:mb-1">
+                <div class="flex items-end mb-4 gap-1 max-md:mb-1">
                   <div class="text-main text-5xl font-bold max-md:text-4xl">05</div>
                   <div class="text-neutral-800 text-2xl font-bold max-md:text-xl">老屋翻修</div>
                 </div>
                 <div class="text-justify text-neutral-500 text-lg max-md:text-sm">老屋不舊，只是等待一次重新出發的機會。從改善採光、更新水電、優化動線到風格設計，重新為生活注入溫度與質感。讓每一段回憶延續下去，同時擁有全新的空間體驗。</div>
               </div>
               <div class="">
-                <div class="flex items-end mb-4 max-md:mb-1">
+                <div class="flex items-end mb-4 gap-1 max-md:mb-1">
                   <div class="text-main text-5xl font-bold max-md:text-4xl">06</div>
                   <div class="text-neutral-800 text-2xl font-bold max-md:text-xl">老屋修繕</div>
                 </div>
@@ -151,45 +155,58 @@
               了解更多
             </a>
           </div>
-          <div class="w-full inline-flex justify-start items-start gap-4 overflow-hidden mb-8">
-            <a href="#" class="flex-1 h-96 relative bg-white bg-[url('/images/indexwork01.png')] bg-cover" style="background-image: url('{{ asset('/images/indexwork01.png')}}')">
-              <div class="left-[16px] bottom-[16px] absolute">
-                <div class="flex flex-col justify-start items-start">
+          <div class="homeSlick2 mb-8">
+            <div class="p-2">
+              <a class="relative">
+                <img class="w-full object-center" src="{{url('/images/indexwork01.png')}}" alt="">
+                <div class="w-full px-4 py-2 left-0 bottom-0 absolute flex flex-col justify-start items-start bg-linear-to-b from-white/0 from-0% to-stone-800 to-90%">
                   <div class="text-white text-2xl font-bold">東區小東路</div>
                   <div class="text-white text-lg">衛浴翻修</div>
                 </div>
-              </div>
-            </a>
-            <a href="#" class="flex-1 h-96 relative bg-white bg-[url('./images/indexwork02.png')] bg-cover" style="background-image: url('{{ asset('/images/indexwork02.png')}}')">
-              <div class="left-[16px] bottom-[16px] absolute">
-                <div class="flex flex-col justify-start items-start">
+              </a>
+            </div>
+            <div class="p-2">
+              <a class="relative">
+                <img class="w-full object-center" src="{{url('/images/indexwork02.png')}}" alt="">
+                <div class="w-full px-4 py-2 left-0 bottom-0 absolute flex flex-col justify-start items-start bg-linear-to-b from-white/0 from-0% to-stone-800 to-90%">
                   <div class="text-white text-2xl font-bold">東區大同段</div>
                   <div class="text-white text-lg">電梯雙車</div>
                 </div>
-              </div>
-            </a>
-            <a href="#" class="flex-1 h-96 relative bg-white bg-[url('/images/indexwork03.png')] bg-cover" style="background-image: url('{{ asset('/images/indexwork03.png')}}')">
-              <div class="left-[16px] bottom-[16px] absolute">
-                <div class="flex flex-col justify-start items-start">
+              </a>
+            </div>
+            <div class="p-2">
+              <a class="relative">
+                <img class="w-full object-center" src="{{url('/images/indexwork05.png')}}" alt="">
+                <div class="w-full px-4 py-2 left-0 bottom-0 absolute flex flex-col justify-start items-start bg-linear-to-b from-white/0 from-0% to-stone-800 to-90%">
+                  <div class="text-white text-2xl font-bold">同安路</div>
+                  <div class="text-white text-lg">重建案例</div>
+                </div>
+              </a>
+            </div>
+            <div class="p-2">
+              <a class="relative">
+                <img class="w-full object-center" src="{{url('/images/indexwork03.png')}}" alt="">
+                <div class="w-full px-4 py-2 left-0 bottom-0 absolute flex flex-col justify-start items-start bg-linear-to-b from-white/0 from-0% to-stone-800 to-90%">
                   <div class="text-white text-2xl font-bold">安南區商60</div>
                   <div class="text-white text-lg">七米電梯雙車</div>
                 </div>
-              </div>
-            </a>
-            <a href="#" class="flex-1 h-96 relative bg-white bg-[url('/images/indexwork04.png')] bg-cover" style="background-image: url('{{ asset('/images/indexwork04.png')}}')">
-              <div class="left-[16px] bottom-[16px] absolute">
-                <div class="flex flex-col justify-start items-start">
+              </a>
+            </div>
+            <div class="p-2">
+              <a class="relative">
+                <img class="w-full object-center" src="{{url('/images/indexwork04.png')}}" alt="">
+                <div class="w-full px-4 py-2 left-0 bottom-0 absolute flex flex-col justify-start items-start bg-linear-to-b from-white/0 from-0% to-stone-800 to-90%">
                   <div class="text-white text-2xl font-bold">府安路5段</div>
                   <div class="text-white text-lg">電梯雙車</div>
                 </div>
-              </div>
-            </a>
+              </a>
+            </div>
           </div>
         </div>
         <!-- contact -->
         <div class="w-full h-[480px] flex items-center justify-center max-lg:h-[320px] relative bg-cover bg-center" style="background-image: url('{{ asset('/images/indexcontact01.png')}}')">
           <div class="flex flex-col items-center gap-4 p-4">
-            <div class="customFont2 text-center text-white text-5xl font-normal uppercase max-md:text-4xl">Contact Us</div>
+            <div class="customFont2 text-center text-white text-7xl font-normal uppercase max-md:text-4xl">Contact Us</div>
             <div class="text-center text-white text-lg mb-4 max-md:text-sm">
               體驗最精緻的室內設計
               <br>
@@ -218,6 +235,9 @@
                   </a>
                   <a href="#" class="w-20 flex justify-start items-center">
                     <div class="text-white/60 text-base tracking-wide hover:text-white max-md:text-sm">作品案例</div>
+                  </a>
+                  <a href="#" class="w-20 flex justify-start items-center">
+                    <div class="text-white/60 text-base tracking-wide hover:text-white max-md:text-sm">專屬客製</div>
                   </a>
                   <a href="#" class="w-20 flex justify-start items-center">
                     <div class="text-white/60 text-base tracking-wide hover:text-white max-md:text-sm">關於我們</div>
@@ -301,6 +321,51 @@
       </div>
     </div>
   </div>
+  <!-- <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
+  <!-- <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script> -->
+  <!-- <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/gh/dixonandmoe/rellax@master/rellax.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script> -->
+  <!-- <script type="text/javascript">
+    $(document).ready(function() {
+      $('.homeSlick1').slick({
+        arrows: false,
+        autoplay: true,
+        infinite: true,
+
+      });
+      $('.homeSlick2').slick({
+        centerPadding: '60px',
+        arrows: false,
+        infinite: true,
+        slidesToShow: 4,
+        slidesToScroll: 4,
+        responsive: [{
+          breakpoint: 1280,
+          settings: {
+            slidesToShow: 3
+          },
+          breakpoint: 768,
+          settings: {
+            slidesToShow: 2
+          }
+        }, ]
+      });
+      // var rellax = new Rellax('.rellax');
+    });
+    document.addEventListener("DOMContentLoaded", (event) => {
+      gsap.registerPlugin(ScrollTrigger)
+      ScrollTrigger.batch(".card", {
+        onEnter: (elements, triggers) => {
+          gsap.to(elements, {
+            opacity: 1,
+            stagger: 0.15
+          });
+        },
+      });
+    });
+  </script> -->
 </body>
 
 </html>
