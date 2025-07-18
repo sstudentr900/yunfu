@@ -16,3 +16,39 @@ body{
 .customFont2{
   font-family: "Chiron Sung HK", sans-serif;
 }
+.customFont3{
+  font-family: "Abril Fatface", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+/*後臺表單*/
+.customTable>div {
+  flex: 1;
+  padding: 15px 10px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.customTable .coverDiv img{
+  width: 100%;
+  max-width: 60px;
+  height: auto;
+  max-height: 60px;
+  object-fit: contain;
+}
+.customTable .sortDiv,
+.customTable .idDiv{
+  flex: 0 0 60px;
+}
+.customTable .releaseDiv{
+  flex: 0 0 80px;
+}
+.customTable .updated_atDiv{
+  flex: 0 0 180px;
+}
+.customTable .coverDiv{
+  flex: 0 0 110px;
+}
+.customTable .modifyDiv{
+  flex: 0 0 110px;
+}

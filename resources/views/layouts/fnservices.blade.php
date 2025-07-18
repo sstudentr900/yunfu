@@ -2,7 +2,7 @@
 <div class="m-auto mb-18 pr-8 relative max-w-7xl max-md:px-4 max-md:mb-8 max-sm:pl-0">
   <div class="inline-flex flex-col justify-start items-start mb-4 max-lg:items-end max-lg:absolute max-lg:bg-white max-lg:right-8 max-lg:top-5 max-lg:p-2">
     <div class="text-main text-2xl max-md:text-lg">服務項目</div>
-    <div class="justify-center text-neutral-800 text-7xl font-bold customFont2 uppercase max-sm:text-5xl">Services</div>
+    <div class="justify-center text-neutral-800 text-7xl customFont3 uppercase max-sm:text-5xl">Services</div>
   </div>
   <div class="flex justify-start items-start gap-12 max-lg:gap-0 max-lg:flex-col">
     <div class="flex-1 max-lg:flex-none max-lg:w-[220px]">

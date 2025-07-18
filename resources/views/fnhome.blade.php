@@ -19,7 +19,7 @@
       <div class="text-justify text-neutral-500 text-lg mb-4 max-md:text-sm">
         我們是一家專注於新建 重建 翻新的 建築設計、工程與室內設計、工程的團隊 ，結合甲級營造實力，擁有超過30年在地經驗，完成無數屋主與商業空間的夢想藍圖。我們相信，設計不只是裝飾，而是生活方式的延伸。
       </div>
-      <a href="#" class="bg-main w-fit px-16 py-3 rounded-[999px] gap-2 text-white text-2xl hover:bg-main-hover max-md:text-base max-md:px-8 max-md:py-2">了解更多</a>
+      <a href="{{ route('fnabout') }}" class="bg-main w-fit px-10 py-3 rounded-[999px] gap-2 text-white text-2xl hover:bg-main-hover max-md:text-base max-md:px-8 max-md:py-2">了解更多</a>
     </div>
   </div>
   <div class="max-lg:flex max-lg:justify-end card">
@@ -47,7 +47,7 @@
       <div class="text-justify text-neutral-500 text-lg mb-4 max-md:text-sm">
         專案內容有防護工程 / 丈量配置設計 / 配電 / 改管 / 拆除 / 清運 / 打底 / 天花板 / 崁燈 / 壁磚 / 地磚 / 防水(滿頂) / 衛浴設備安裝(毛巾架 / 馬桶 / 洗手台)，此價格為1坪浴廁翻新價格，不含衛浴設備，限定台南市區，最終價格依現場評估為主。
       </div>
-      <a href="#" class="bg-main w-fit px-16 py-3 rounded-[999px] gap-2 text-white text-2xl hover:bg-main-hover max-md:text-base max-md:px-8 max-md:py-2">了解更多</a>
+      <a href="{{ route('fncontact') }}" class="bg-main w-fit px-10 py-3 rounded-[999px] gap-2 text-white text-2xl hover:bg-main-hover max-md:text-base max-md:px-8 max-md:py-2">了解更多</a>
     </div>
   </div>
 </div>
@@ -57,9 +57,9 @@
   <div class="flex justify-between items-center mb-4">
     <div class="inline-flex flex-col justify-start items-start">
       <div class="text-main justify-center text-2xl max-md:text-lg">精選作品</div>
-      <div class="justify-center text-neutral-800 text-7xl font-bold customFont2 uppercase max-sm:text-5xl">work</div>
+      <div class="justify-center text-neutral-800 text-7xl customFont3 uppercase max-sm:text-5xl">work</div>
     </div>
-    <a href="#" class="bg-main w-fit px-16 py-3 rounded-[999px] gap-2 text-white text-2xl font-normal hover:bg-main-hover max-md:text-base max-md:px-8 max-md:py-2">
+    <a href="{{ route('fnworks') }}" class="bg-main w-fit px-10 py-3 rounded-[999px] gap-2 text-white text-2xl font-normal hover:bg-main-hover max-md:text-base max-md:px-8 max-md:py-2">
       了解更多
     </a>
   </div>

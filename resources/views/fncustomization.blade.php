@@ -4,7 +4,7 @@
 <div class="md:mb-18 max-md:mb-8 relative">
   <img class="w-full object-center object-cover max-md:min-h-[200px] max-h-[400px]" src="{{url('/images/customization01.png')}}" alt="">
   <div class="absolute inset-0 flex flex-col items-center justify-center">
-    <div class="text-white customFont2 text-5xl font-bold uppercase max-md:text-4xl">Customization</div>
+    <div class="text-white customFont3 text-6xl uppercase max-md:text-4xl">Customization</div>
     <div class="text-white text-2xl max-md:text-base">專屬客製</div>
   </div>
 </div>

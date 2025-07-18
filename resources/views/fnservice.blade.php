@@ -4,7 +4,7 @@
 <div class="md:mb-18 max-md:mb-8 relative">
   <img class="w-full object-center object-cover max-md:min-h-[200px] max-h-[400px]" src="{{url('/images/service01.png')}}" alt="">
   <div class="absolute inset-0 flex flex-col items-center justify-center">
-    <div class="text-white customFont2 text-5xl font-bold uppercase max-md:text-4xl">SERVICE</div>
+    <div class="text-white customFont3 text-7xl uppercase max-md:text-5xl">SERVICE</div>
     <div class="text-white text-2xl max-md:text-base">服務內容</div>
   </div>
 </div>
@@ -18,7 +18,7 @@
 <div class="m-auto mb-18 pr-8 relative max-w-7xl max-md:px-4 max-md:mb-8 max-sm:pl-0">
   <div class="inline-flex flex-col justify-start items-start mb-4 max-lg:items-end max-lg:absolute max-lg:bg-white max-lg:right-8 max-lg:top-5 max-lg:p-2">
     <div class="text-main text-2xl max-md:text-lg">服務流程</div>
-    <div class="justify-center text-neutral-800 text-7xl font-bold customFont2 uppercase max-sm:text-5xl">PROCESS</div>
+    <div class="justify-center text-neutral-800 text-7xl customFont3 uppercase max-sm:text-5xl">PROCESS</div>
   </div>
   <div class="flex justify-start items-start gap-12 max-lg:gap-0 max-lg:flex-col">
     <div class="flex-1 max-lg:flex-none max-lg:w-[220px]">
