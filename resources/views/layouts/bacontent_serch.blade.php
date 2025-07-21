@@ -38,7 +38,7 @@
           print_r($data);
         @endphp--}}
       @if ($form['type']=='img')
-      <img src="{{ URL::asset(config('app.imgName')).'/'.$data[$form['name']].'?'.rand() }}">
+      <img src="{{ URL::asset('images').'/'.$data[$form['name']].'?'.rand() }}">
       @elseif ($form['type']=='release')
       <p>{{ $data[$form['name']]==$form['v_text']?$form['y_text']:$form['n_text'] }}</p>
       @elseif ($form['type']=='text')

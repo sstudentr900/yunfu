@@ -78,7 +78,7 @@ class CustomFn
   static function imgAdd($fileValue, $customName, $fileSrc=null)
   {
     $imgName =  $customName . time() . '.jpg';
-    $fileSrc = $fileSrc?$fileSrc:config('app.imgName');
+    $fileSrc = $fileSrc?$fileSrc:'images';
     $path = base_path().'/public/'.$fileSrc.'/'.$imgName; //圖片路徑
     file_put_contents($path, base64_decode(str_replace('data:image/jpeg;base64,', '', $fileValue))); //返回的是字节数
     return $imgName;
@@ -90,7 +90,7 @@ class CustomFn
 
     //有上傳圖片路徑
     // $path = base_path().'/public/'.config('app.imgName').'/'.$userData->cover; 
-    $fileSrc = $fileSrc?$fileSrc:config('app.imgName');
+    $fileSrc = $fileSrc?$fileSrc:'images';
     $path = base_path().'/public/'.$fileSrc.'/'.$userData->cover; 
     // dd($fileValue,$path,file_exists($path),is_file($path));
     if (file_exists($path) && is_file($path)) {
@@ -109,7 +109,7 @@ class CustomFn
   {
     if ($userData->cover != 'error.jpg') {
       // $imgName = base_path().'/public/'.config('app.imgName').'/'.($userData->cover);
-      $fileSrc = $fileSrc?$fileSrc:config('app.imgName');
+      $fileSrc = $fileSrc?$fileSrc:'images';
       $path = base_path().'/public/'.$fileSrc.'/'.$userData->cover; //圖片路徑
       if (file_exists($path) && is_file($path)) {
         unlink($path);

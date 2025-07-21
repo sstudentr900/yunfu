@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+//加密
+use Illuminate\Support\Facades\Hash;
 //自訂函數
 use App\Http\Controllers\CustomFn;
 //db
 use App\Models\Manager;
+
 class BamanagerController extends Controller
 {
-    //共用
+  //共用
   public $result = [
     'end' => 8, //顯示數量
     'release' => 'y',
@@ -30,6 +33,7 @@ class BamanagerController extends Controller
     $this->result['datas'] =  $datas;
     $this->result['pageStart'] =  $result['pageStart'];
     $this->result['pageTotle'] =  $result['pageTotle'];
+    // dd('$this->result',$this->result);
     return view($this->result['viewName'], $this->result);
   }
   public function addpost($request)
@@ -47,15 +51,16 @@ class BamanagerController extends Controller
       ]);
     }
 
+
     // save
-    // $this->result['main_db']::create([
-    //   'cover' => CustomFn::imgAdd($input['cover'],'bamanager'),
-    //   'account' => $input['account'],
-    //   'password' => Hash::make($input['password']),
-    //   'name' => $input['name'],
-    //   'phone' => $input['phone'],
-    //   'release' => $input['release'],
-    // ]);
+    $this->result['main_db']::create([
+      'cover' => CustomFn::imgAdd($input['cover'], 'bamanager'),
+      'account' => $input['account'],
+      'password' => Hash::make($input['password']),
+      'name' => $input['name'],
+      'phone' => $input['phone'],
+      'release' => $input['release'],
+    ]);
 
     return redirect($this->result['viewName']);
   }
@@ -79,16 +84,16 @@ class BamanagerController extends Controller
     }
 
     //save
-    // $data = $this->result['main_db']::find($this->result['main_id']);
-    // $imgUpdata = CustomFn::imgUpdata($input['cover'],$data,'bamanager');
-    // if($imgUpdata){
-    //     $data->cover = $imgUpdata;
-    // }
-    // $data->account = $input['account'];
-    // $data->name = $input['name'];
-    // $data->phone = $input['phone'];
-    // $data->release = $input['release'];
-    // $data->save();
+    $data = $this->result['main_db']::find($this->result['main_id']);
+    $imgUpdata = CustomFn::imgUpdata($input['cover'],$data,'bamanager');
+    if($imgUpdata){
+        $data->cover = $imgUpdata;
+    }
+    $data->account = $input['account'];
+    $data->name = $input['name'];
+    $data->phone = $input['phone'];
+    $data->release = $input['release'];
+    $data->save();
 
     //回到更新頁
     return redirect($this->result['viewName']);
@@ -126,6 +131,7 @@ class BamanagerController extends Controller
       ['type' => 'tel', 'id' => 'phone', 'label' => '管員電話'],
       ['type' => 'release', 'id' => 'release', 'label' => '管員狀態'],
     );
+    // dd('12',$this->result);
     return view('bamanager_update', $this->result);
   }
   public function bamanager_addpost(Request $request)
@@ -161,18 +167,18 @@ class BamanagerController extends Controller
   public function bamanager_password($id, $pageId, $value)
   {
     //save
-    // $data = Manager::find($id);
-    // $data->password = Hash::make($value);
-    // $data->save();
+    $data = Manager::find($id);
+    $data->password = Hash::make($value);
+    $data->save();
 
     return redirect('bamanager/' . $pageId);
   }
   public function bamanager_delete($id, $pageId)
   {
     //delete
-    // $data = Manager::find($id);
-    // CustomFn::imgDelet($data);
-    // $data->delete();
+    $data = Manager::find($id);
+    CustomFn::imgDelet($data);
+    $data->delete();
 
     return redirect('bamanager/' . $pageId);
   }

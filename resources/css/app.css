@@ -52,3 +52,16 @@ body{
 .customTable .modifyDiv{
   flex: 0 0 110px;
 }
+/*後臺表單*/
+.puplicError {
+  font-size: 12px;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 100;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: red;
+  color: #fff;
+  position: absolute;
+  left: 4px;
+  bottom: -16px;
+}
