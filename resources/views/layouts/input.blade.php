@@ -65,45 +65,6 @@
   <div class="puplicError">{!! $message !!}</div>
   @enderror
 </div>
-@elseif ($type=='fileXX')
-<!-- 單圖上傳預覽 -->
-<label>{{ $label }}@if(isset($require))<span class="puplicRequired">*</span>@endif</label>
-<div class="input">
-  <div class="publicImg {{ isset($datas)&&!empty($datas->$id)&&!count($errors->get($id))||old($id)?'active':'' }}">
-    <label for="{{$id}}">
-      <span>請選擇檔案</span>
-      <input class="cover" id="{{$id}}" type="file" accept=".jpg, .jpeg, .png, .pdf">
-    </label>
-    <!-- 全部表單沒有值錯誤(!$errors->any()),該值沒有錯誤(count($errors->get($id))),他有沒有值(!empty($datas->$id)),上次有該值(old($id)), -->
-    @if(isset($datas)&&!empty($datas->$id)&&!count($errors->get($id))||old($id))
-    @php
-    $imgSaveSrc = isset($imgSaveSrc)&&$imgSaveSrc?$imgSaveSrc:'images';
-    $imgSrc = URL::asset($imgSaveSrc).'/'.$datas->$id.'?'.rand();
-    $inputValue = $datas->$id;
-    if(old($id)){
-    if(strpos(old($id),'data') !== false){
-    $imgSrc = old($id);
-    }
-    $inputValue = old($id);
-    }
-    @endphp
-    <div class="img">
-      <div class="imgDiv">
-        <img src="{{ $imgSrc }}" alt="">
-      </div>
-      <i>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path>
-        </svg>
-      </i>
-      <input type="hidden" name="{{ isset($name)?$name:$id }}" value="{{ $inputValue }}">
-    </div>
-    @endif
-  </div>
-  @error($id)
-  <div class="puplicError">{!! $message !!}</div>
-  @enderror
-</div>
 @elseif ($type=='file')
 {{-- html 單圖上傳預覽 --}}
 <label>{{ $label }}@if(isset($require))<span class="puplicRequired">*</span>@endif</label>
@@ -117,7 +78,6 @@
     @if(old($id))
     @php
     $imgSaveSrc = isset($imgSaveSrc)&&$imgSaveSrc?$imgSaveSrc:'images';
-
     $imgSrc = URL::asset($imgSaveSrc).'/'.old($id).'?'.rand();
     if(strpos(old($id),'data') !== false){
     $imgSrc = old($id);
@@ -164,10 +124,16 @@
   .publicImg {
     width: 120px;
     height: 120px;
-    border: 1px solid #ced4da;
+    /* border: 1px solid #ced4da; */
+    border: 1px dashed #ced4da;
+    border-radius: 4px;
     position: relative;
     display: inline-block;
     flex: 0 0 120px;
+  }
+
+  .publicImg.active {
+    border: none;
   }
 
   .publicImg label {
@@ -190,38 +156,47 @@
 
   .publicImg .img {
     width: 100%;
-    padding: 5px;
+    /* padding: 5px; */
     position: absolute;
     top: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 118px;
   }
 
   .publicImg .img img {
     width: 100%;
     height: auto;
-    max-width: 110px;
-    max-height: 110px;
-    object-fit: contain;
+    /* max-width: 110px;
+    max-height: 110px; */
+    /* object-fit: contain; */
+    height: 120px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .publicImg .img:hover i {
+    opacity: 1;
   }
 
   .publicImg i {
     position: absolute;
-    top: -6px;
-    right: -10px;
-    background: #fff;
+    padding: 4px;
+    z-index: 1;
+    top: 6px;
+    right: 6px;
+    background-color: #ef4444;
+    color: white;
     border-radius: 50%;
-    border: 1px solid #ced4da;
-    cursor: pointer;
-    width: 25px;
-    height: 25px;
-    padding: 5px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s;
+    cursor: pointer;
+    border: none;
   }
 
   .publicImg i svg {
@@ -283,7 +258,66 @@
       // publicImg.classList.remove('active')
       img.remove();
     }
-    var preview2 = function(input, imgWidth, imgHight, imgSize) {
+    // 檢查並裁切圖片尺寸
+    async function resizeImage(file, imgWidth = 560, imgHight = 350) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = imgWidth;
+          canvas.height = imgHight;
+          const ctx = canvas.getContext('2d');
+
+          let width = img.width;
+          let height = img.height;
+          let offsetX = 0;
+          let offsetY = 0;
+
+          // 按比例放大填滿畫布（短邊至少等於目標尺寸）
+          const ratio = Math.max(imgWidth / width, imgHight / height);
+          width = width * ratio;
+          height = height * ratio;
+
+          // 計算裁切偏移（居中）
+          offsetX = (width - imgWidth) / 2;
+          offsetY = (height - imgHight) / 2;
+
+          // 繪製圖片，填滿畫布並裁切
+          ctx.drawImage(img, -offsetX, -offsetY, width, height);
+
+          // 轉換為 Blob
+          canvas.toBlob((blob) => resolve(blob), file.type, 1.0);
+        };
+        img.onerror = () => resolve(null);
+        img.src = URL.createObjectURL(file);
+      });
+    }
+
+    // 壓縮圖片到 1MB 以下
+    async function compressImage(file, imgSize = 1) {
+      let quality = 1.0;
+      let blob = file;
+
+      while (blob.size > imgSize * 1024 * 1024 && quality > 0.1) {
+        quality -= 0.1;
+        blob = await new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            canvas.toBlob((newBlob) => resolve(newBlob), file.type, quality);
+          };
+          img.onerror = () => resolve(null);
+          img.src = URL.createObjectURL(file);
+        });
+        if (!blob) break;
+      }
+      return blob;
+    }
+    var preview2 = async function(input, imgWidth, imgHight, imgSize) {
       //固定
       var imgSizeNumber = imgSize * 1048576 //大小
       var file = input.files[0];
@@ -318,7 +352,7 @@
             }),
             creatHtml({
               'tage': 'i',
-              'text': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>',
+              'text': '<svg viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>',
               'handler': function() {
                 closeImg(publicImg)
                 publicImg.classList.remove('active')
@@ -354,66 +388,34 @@
         return;
       }
 
-      if (imgSizeNumber <= file.size) {
-        alert('錯誤 : 圖片大小需小於' + imgSize + 'M');
-        input.value = '';
-        publicImg.classList.remove('active')
-        return;
+      // 檢查尺寸並裁切
+      let processedFile = await resizeImage(file, maxWidth = 560, maxHeight = 350);
+      // if (!processedFile) {
+      //   ignoredFiles.push(file.name);
+      //   console.error(`無法處理檔案: ${file.name}`);
+      //   continue;
+      // }
+
+      // 檢查大小並壓縮
+      if (processedFile.size > 1024 * 1024) { // 大於 1MB
+        processedFile = await compressImage(processedFile, 1);
+        //   if (!processedFile) {
+        //     ignoredFiles.push(file.name);
+        //     console.error(`無法壓縮檔案: ${file.name}`);
+        //     continue;
+        //   }
       }
 
-      if (w) {
-        //依據格式自動切圖
-        file2Image(file, function(img) {
-          var canvas = document.createElement("canvas");
-          var context = canvas.getContext("2d");
-          if (imgWidth) {
-            canvas.width = imgWidth;
-            canvas.height = imgHight;
-            var imageWidth = img.width;
-            var imageHeight = img.height;
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            //背景白色
-            context.fillStyle = "white";
-            context.fillRect(0, 0, img.width, img.height);
-            if ((imageWidth / imgWidth) > (imageHeight / imgHight)) {
-              context.drawImage(img, imgWidth / 2 - (imgHight * imageWidth / imageHeight) / 2, 0, imgHight * imageWidth / imageHeight, imgHight);
-            } else {
-              context.drawImage(img, 0, imgHight / 2 - (imgWidth * imageHeight / imageWidth) / 2, imgWidth, imgWidth * imageHeight / imageWidth);
-            }
-          } else {
-            canvas.width = img.width;
-            canvas.height = img.height;
-            //背景白色
-            context.fillStyle = "white";
-            context.fillRect(0, 0, img.width, img.height);
-            //裁切圖片
-            context.drawImage(img, 0, 0, img.width, img.height);
-          }
-          //轉圖片
-          inImage({
-            'obj': input,
-            'img': canvas.toDataURL("image/jpeg", 0.9)
-          })
+      // console.log('processedFile', processedFile)
+      const reader = new FileReader();
+      reader.onloadend = function() {
+        // callback(reader.result); // result 就是 base64 dataURL
+        inImage({
+          'obj': input,
+          'img': reader.result
         })
-      } else {
-        //不切圖
-        file2Image(file, function(img) {
-          var canvas = document.createElement("canvas");
-          var context = canvas.getContext("2d");
-          canvas.width = img.width;
-          canvas.height = img.height;
-          //背景白色
-          context.fillStyle = "white";
-          context.fillRect(0, 0, img.width, img.height);
-          //裁切圖片
-          context.drawImage(img, 0, 0, img.width, img.height);
-          //轉圖片
-          inImage({
-            'obj': input,
-            'img': canvas.toDataURL("image/jpeg", 1.0)
-          })
-        })
-      }
+      };
+      reader.readAsDataURL(processedFile);
     }
     var cover = document.querySelector('#cover')
     if (cover) {
@@ -438,413 +440,106 @@
 </script>
 @endpush
 @endonce
-@elseif ($type=='pdf')
-<!-- 單圖上傳 -->
+@elseif ($type=='filemore')
+{{-- 多圖上傳 --}}
 <label>{{ $label }}@if(isset($require))<span class="puplicRequired">*</span>@endif</label>
-<div class="input">
-  <div class="publicPdf {{(isset($datas)&&!empty($datas))||old($id)?'active':''}}">
-    <ul>
-      <li>
-        @if(isset($datas)&&!empty($datas))
-        <div>{{$datas->pdf}}</div>
-        <a data-target='close' data-id='{{ $datas->id }}'>刪除</a>
-        <input type="hidden" name="{{ isset($name)?$name:$id }}">
-        @else
-        <div><input type="file" name="{{ isset($name)?$name:$id }}" data-target='file'></div>
-        @endif
-      </li>
-    </ul>
-  </div>
-  @error($id)
-  <div class="puplicError">{!! $message !!}</div>
-  @enderror
-</div>
-@elseif ($type=='file2')
-<!-- 多圖上傳預覽 jpg pdf -->
-<div class="publicAppendix" data-target="fileDiv2">
-  <label data-target='add'>
-    {{ $label }}
-    @if(isset($require))<span class="puplicRequired">*</span>@endif
-    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="537.947px" height="537.947px" viewBox="0 0 537.947 537.947"><path d="M268.974,0C120.411,0,0,120.411,0,268.974c0,148.563,120.411,268.973,268.974,268.973s268.973-120.334,268.973-268.973
-      C537.947,120.334,417.537,0,268.974,0z M394.51,286.033c0,11.857-9.715,21.496-21.496,21.496h-64.566v64.566
-      c0,11.857-9.715,21.496-21.496,21.496h-35.878c-11.857,0-21.497-9.715-21.497-21.496v-64.566h-64.566
-      c-11.857,0-21.497-9.715-21.497-21.496v-35.878c0-11.857,9.715-21.497,21.497-21.497h64.566v-64.566
-      c0-11.857,9.715-21.496,21.497-21.496h35.878c11.857,0,21.496,9.715,21.496,21.496v64.566h64.566
-      c11.857,0,21.496,9.716,21.496,21.497V286.033z"/></svg> -->
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 309.059 309.059">
-      <path style="fill:currentColor;" d="M280.71,126.181h-97.822V28.338C182.889,12.711,170.172,0,154.529,0S126.17,12.711,126.17,28.338    v97.843H28.359C12.722,126.181,0,138.903,0,154.529c0,15.621,12.717,28.338,28.359,28.338h97.811v97.843    c0,15.632,12.711,28.348,28.359,28.348c15.643,0,28.359-12.717,28.359-28.348v-97.843h97.822    c15.632,0,28.348-12.717,28.348-28.338C309.059,138.903,296.342,126.181,280.71,126.181z" />
-    </svg>
-  </label>
-  <div class="input">
-    @if(isset($appendixs))
-    @foreach ($appendixs as $appendix)
-    <div class="publicImg">
-      <div class="img">
-        @if(strpos($appendix->src,'.pdf')==false)
-        <!-- jpg -->
-        <div class='imgDiv'>
-          <img src="{{ Storage::url(str_replace('public/','',$appendix->src)).'?'.rand() }}">
-        </div>
-        @else
-        <!-- pdf -->
-        <div class="pdf"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 498.436 498.436" style="enable-background:new 0 0 498.436 498.436;" xml:space="preserve">
-            <path d="M389.277,0H74.15v68.25H22.941v181.13h51.187v249.056h401.368V80.653L389.277,0z M293.805,151.125v14.841H257.07v37.49     h-17.731v-87.987h60.355v14.884H257.07v20.773H293.805z M224.261,160.314c0,7.248-0.906,13.482-2.696,18.723     c-2.2,6.385-5.371,11.584-9.405,15.531c-3.128,3.063-7.226,5.371-12.425,7.032c-4.012,1.23-9.232,1.877-15.747,1.877h-33.392     v-88.009h32.399c7.312,0,12.921,0.539,16.76,1.661c5.134,1.553,9.534,4.228,13.201,8.111c3.689,3.883,6.471,8.585,8.434,14.258     C223.312,145.171,224.261,152.052,224.261,160.314z M86.359,170.258v33.241H68.627v-0.022v-88.009h28.452     c10.785,0,17.817,0.453,21.053,1.337c5.004,1.337,9.297,4.185,12.64,8.542c3.451,4.465,5.134,10.181,5.134,17.127     c0,5.436-0.971,9.923-2.934,13.611c-1.941,3.753-4.422,6.601-7.485,8.736c-2.955,2.049-5.997,3.473-9.103,4.12     c-4.293,0.82-10.354,1.316-18.4,1.316H86.359z M446.375,469.186c-25.842,0-317.306,0-343.105,0c0-13.223,0-116.482,0-219.806     h244.613V68.25H103.292c0-20.535,0-34.751,0-39.108c25.756,0,263.983,0,274.531,0c6.989,6.601,60.873,56.968,68.595,64.151     C446.375,105.136,446.375,442.654,446.375,469.186z"></path>
-            <path d="M199.066,135.357c-2.157-2.071-4.875-3.408-8.175-4.12c-2.545-0.582-7.334-0.863-14.539-0.863h-7.981v58.22h13.201     c4.94,0,8.499-0.259,10.721-0.841c2.912-0.712,5.285-1.985,7.161-3.667c1.941-1.726,3.451-4.53,4.681-8.456     c1.186-3.969,1.812-9.362,1.812-16.135c0-6.73-0.604-12.015-1.812-15.596C202.884,140.232,201.201,137.406,199.066,135.357z"></path>
-            <path d="M114.724,134.882c-1.855-2.071-4.249-3.343-7.118-3.904c-2.049-0.41-6.363-0.604-12.705-0.604h-8.542v24.957h9.621     c7.01,0,11.648-0.431,13.999-1.381c2.373-0.906,4.228-2.33,5.587-4.293c1.337-1.963,1.963-4.228,1.963-6.86     C117.55,139.628,116.687,136.996,114.724,134.882z"></path>
-          </svg></div>
-        @endif
-      </div>
-      <i data-target='minus' data-id='{{$appendix->id}}'>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path>
+<div class="filemore">
+  <div id="preview">
+    @if(isset($datas2))
+    @foreach ($datas2 as $item)
+    <div class="preview-item">
+      <img src="{{ URL::asset('images').'/'.$item['cover'].'?'.rand() }}">
+      <button type="button" class="delete-btn" data-id="{{$item['id']}}">
+        <svg viewBox="0 0 24 24">
+          <path d="M6 18L18 6M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
-      </i>
+      </button>
     </div>
     @endforeach
-    @else
-    <div class="publicImg">
-      <label for="cover0">
-        <span>請選擇檔案</span>
-        <input class="cover" id="cover0" type="file" accept=".jpg, .jpeg, .png, .pdf" name="file[]" data-target="file">
-      </label>
-      <i data-target='minus'>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path>
-        </svg>
-      </i>
-    </div>
     @endif
   </div>
-</div>
-@elseif ($type=='file3')
-<!-- 單pdf上傳預覽  -->
-<div class="publicAppendix" data-target="fileDiv3">
-  <label data-target='add'>
-    {{ $label }}
-    @if(isset($require))<span class="puplicRequired">*</span>@endif
-  </label>
-  <div class="input">
-    @if(isset($datas)&&!empty($datas->$id)&&!count($errors->get($id))||old($id))
-    <div class="publicImg">
-      <div class="img">
-        <div class="pdf"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 498.436 498.436" style="enable-background:new 0 0 498.436 498.436;" xml:space="preserve">
-            <path d="M389.277,0H74.15v68.25H22.941v181.13h51.187v249.056h401.368V80.653L389.277,0z M293.805,151.125v14.841H257.07v37.49     h-17.731v-87.987h60.355v14.884H257.07v20.773H293.805z M224.261,160.314c0,7.248-0.906,13.482-2.696,18.723     c-2.2,6.385-5.371,11.584-9.405,15.531c-3.128,3.063-7.226,5.371-12.425,7.032c-4.012,1.23-9.232,1.877-15.747,1.877h-33.392     v-88.009h32.399c7.312,0,12.921,0.539,16.76,1.661c5.134,1.553,9.534,4.228,13.201,8.111c3.689,3.883,6.471,8.585,8.434,14.258     C223.312,145.171,224.261,152.052,224.261,160.314z M86.359,170.258v33.241H68.627v-0.022v-88.009h28.452     c10.785,0,17.817,0.453,21.053,1.337c5.004,1.337,9.297,4.185,12.64,8.542c3.451,4.465,5.134,10.181,5.134,17.127     c0,5.436-0.971,9.923-2.934,13.611c-1.941,3.753-4.422,6.601-7.485,8.736c-2.955,2.049-5.997,3.473-9.103,4.12     c-4.293,0.82-10.354,1.316-18.4,1.316H86.359z M446.375,469.186c-25.842,0-317.306,0-343.105,0c0-13.223,0-116.482,0-219.806     h244.613V68.25H103.292c0-20.535,0-34.751,0-39.108c25.756,0,263.983,0,274.531,0c6.989,6.601,60.873,56.968,68.595,64.151     C446.375,105.136,446.375,442.654,446.375,469.186z"></path>
-            <path d="M199.066,135.357c-2.157-2.071-4.875-3.408-8.175-4.12c-2.545-0.582-7.334-0.863-14.539-0.863h-7.981v58.22h13.201     c4.94,0,8.499-0.259,10.721-0.841c2.912-0.712,5.285-1.985,7.161-3.667c1.941-1.726,3.451-4.53,4.681-8.456     c1.186-3.969,1.812-9.362,1.812-16.135c0-6.73-0.604-12.015-1.812-15.596C202.884,140.232,201.201,137.406,199.066,135.357z"></path>
-            <path d="M114.724,134.882c-1.855-2.071-4.249-3.343-7.118-3.904c-2.049-0.41-6.363-0.604-12.705-0.604h-8.542v24.957h9.621     c7.01,0,11.648-0.431,13.999-1.381c2.373-0.906,4.228-2.33,5.587-4.293c1.337-1.963,1.963-4.228,1.963-6.86     C117.55,139.628,116.687,136.996,114.724,134.882z"></path>
-          </svg></div>
-      </div>
-      <i data-target='minus'>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path>
-        </svg>
-      </i>
-      <input type="hidden" name="{{ isset($name)?$name:$id }}" value="{{ old($id)?old($id):$datas->$id }}">
-    </div>
-    @else
-    <div class="publicImg">
-      <label for="cover0">
-        <span>請選擇檔案</span>
-        <!-- <input class="cover" id="cover0" type="file" accept=".jpg, .jpeg, .png, .pdf"  name="{{ isset($name)?$name:$id }}" data-target="file"> -->
-        <input class="cover" id="cover0" type="file" accept=".pdf" name="{{ isset($name)?$name:$id }}" data-target="file">
-      </label>
-      <i data-target='minus'>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path>
-        </svg>
-      </i>
-    </div>
-    @endif
-    @error($id)
-    <div class="puplicError">{!! $message !!}</div>
-    @enderror
+  <div id="dropZone">
+    <p>拖放圖片到此處或點擊選擇檔案</p>
+    <!-- accept="image/*" -->
+    <!-- name="filemore[]" -->
+    <input type="file" id="fileInput" name="{{ isset($name)?$name:$id }}[]" accept=".jpg, .jpeg, .png" multiple>
   </div>
-</div>
-@elseif ($type=='file4')
-<!-- 單檔上傳(word,pdf,jpg)和連結 -->
-<div class="publicFileMore fileMethod" data-target="fileMethod">
-  <label>
-    <select name="file_select">
-      <option value="0" @php if(isset($datas)&&$datas->file_select=='0' || !isset($datas)){ echo ' selected'; }@endphp>連結</option>
-      <option value="1" @php if(isset($datas)&&$datas->file_select=='1' ){ echo ' selected'; }@endphp>檔案</option>
-    </select>
-    @if(isset($require))<span class="puplicRequired">*</span>@endif
-  </label>
-  <div class="input">
-    <!-- 
-        連結 (當datas沒有值進入連結 || datas有值&&file_select為0&&沒有錯誤 || datas有值&&file_select為0&&有錯誤);
-        value (old有上一次紀錄 || datas有值&&沒有錯誤 || 空)
-      -->
-    @if(
-    !isset($datas) ||
-    isset($datas) && $datas->file_select=='0' && !count($errors->get('file_value')) ||
-    isset($datas) && $datas->file_select=='0' && count($errors->get('file_value'))
-    )
-    <div class="url">
-      <input
-        type="text"
-        name="file_value"
-        placeholder="請輸入連結"
-        value="{{ old('file_value')?old('file_value'):(isset($datas)&&!count($errors->get('file_value'))?$datas->file_value:'') }}">
-    </div>
-    @else
-    <!-- 需解決有值但其他覽位錯誤該如何帶值 -->
-    @if(
-    !empty('file_value') && !count($errors->get('file_value'))
-    )
-    <div class="publicImg">
-      <div class="img">
-        <div class="other">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-            <path d="M13.744 8s1.522-8-3.335-8h-8.409v24h20v-13c0-3.419-5.247-3.745-8.256-3zm4.256 11h-12v-1h12v1zm0-3h-12v-1h12v1zm0-3h-12v-1h12v1zm-3.432-12.925c2.202 1.174 5.938 4.883 7.432 6.881-1.286-.9-4.044-1.657-6.091-1.179.222-1.468-.185-4.534-1.341-5.702z" />
-          </svg>
-        </div>
-      </div>
-      <i data-target='minus'>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path>
-        </svg>
-      </i>
-      <input type="hidden" name="file_value" value="{{ old('file_value')?old('file_value'):(isset($datas)&&!count($errors->get('file_value'))?$datas->file_value:'') }}">
-    </div>
-    @else
-    <div class="publicImg">
-      <label for="cover0">
-        <span>請選擇檔案</span>
-        <input class="cover" id="cover0" type="file" accept=".jpg, .jpeg, .png, .pdf, .docx" name="file_value" data-target="file">
-      </label>
-      <i data-target='minus'>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path>
-        </svg>
-      </i>
-    </div>
-    @endif
-    @endif
-
-    @error('file_value')
-    <div class="puplicError">{!! $message !!}</div>
-    @enderror
-  </div>
-</div>
-@elseif ($type=='file5')
-<style>
-  /*publicImgZoom*/
-  .publicImg .imgZoom {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 5px;
-  }
-
-  .publicImg .imgZoom img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  .publicImgZoom {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 9;
-    background: rgba(0, 0, 0, .8);
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .publicImgZoom .box {
-    width: 100%;
-    height: 100%;
-    max-width: 80%;
-    max-height: 80%;
-    padding: 30px 40px;
-    position: relative;
-  }
-
-  .publicImgZoom i {
-    fill: #fff;
-    cursor: pointer;
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-
-  .publicImgZoom img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-</style>
-<div class="publicAppendix" data-target="fileDiv">
-  <label data-target='add'>{{ $label }}@if(isset($require))<span class="puplicRequired">*</span>@endif<svg xmlns="http://www.w3.org/2000/svg" width="537.947px" height="537.947px" viewBox="0 0 537.947 537.947">
-      <path d="M268.974,0C120.411,0,0,120.411,0,268.974c0,148.563,120.411,268.973,268.974,268.973s268.973-120.334,268.973-268.973
-		C537.947,120.334,417.537,0,268.974,0z M394.51,286.033c0,11.857-9.715,21.496-21.496,21.496h-64.566v64.566
-		c0,11.857-9.715,21.496-21.496,21.496h-35.878c-11.857,0-21.497-9.715-21.497-21.496v-64.566h-64.566
-		c-11.857,0-21.497-9.715-21.497-21.496v-35.878c0-11.857,9.715-21.497,21.497-21.497h64.566v-64.566
-		c0-11.857,9.715-21.496,21.497-21.496h35.878c11.857,0,21.496,9.715,21.496,21.496v64.566h64.566
-		c11.857,0,21.496,9.716,21.496,21.497V286.033z" />
-    </svg></label>
-  <div class="input">
-    @if(isset($appendixs))
-    @foreach ($appendixs as $appendix)
-    <div class="publicImg">
-      <div class="img">
-        <img src="@php
-              echo Storage::url(str_replace('public/','',$appendix->src)).'?'.rand();
-            @endphp">
-      </div>
-      <i data-target='minus' data-id='{{$appendix->id}}'>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path>
-        </svg>
-      </i>
-    </div>
-    @endforeach
-    @else
-    <div class="publicImg">
-      <label for="cover0">
-        <span>請選擇圖片</span>
-        <input class="cover" id="cover0" type="file" accept=".jpg, .jpeg, .png, .pdf" name="file[]" data-target="file">
-      </label>
-      <i data-target='minus'>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path>
-        </svg>
-      </i>
-    </div>
-    @endif
-  </div>
-</div>
-@elseif ($type=='file10')
-{{-- html 單圖上傳預覽 --}}
-<label>{{ $label }}@if(isset($require))<span class="puplicRequired">*</span>@endif</label>
-<div class="input">
-  <div class="publicImg fileMore">
-    <label for="{{$id}}">
-      <span>請選擇檔案</span>
-      <input class="cover" id="{{$id}}" type="file" accept=".jpg, .jpeg, .png, .pdf">
-    </label>
-    <!-- 全部表單沒有值錯誤(!$errors->any()),該值沒有錯誤(count($errors->get($id))),他有沒有值(!empty($datas->$id)),上次有該值(old($id)), -->
-    @if(old($id))
-    @php
-    $imgSaveSrc = isset($imgSaveSrc)&&$imgSaveSrc?$imgSaveSrc:'images';
-
-    $imgSrc = URL::asset($imgSaveSrc).'/'.old($id).'?'.rand();
-    if(strpos(old($id),'data') !== false){
-    $imgSrc = old($id);
-    }
-    @endphp
-    <div class="img">
-      <div class="imgDiv">
-        <img src="{{ $imgSrc }}" alt="">
-      </div>
-      <i>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path>
-        </svg>
-      </i>
-      <input type="hidden" name="{{ isset($name)?$name:$id }}" value="{{ old($id) }}">
-    </div>
-    @elseif(isset($datas)&&!empty($datas->$id)&&!count($errors->get($id)))
-    @php
-    $imgSaveSrc = isset($imgSaveSrc)&&$imgSaveSrc?$imgSaveSrc:'images';
-    $imgSrc = URL::asset($imgSaveSrc).'/'.$datas->$id.'?'.rand();
-    @endphp
-    <div class="img">
-      <div class="imgDiv">
-        <img src="{{ $imgSrc }}" alt="">
-      </div>
-      <i>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path>
-        </svg>
-      </i>
-      <input type="hidden" name="{{ isset($name)?$name:$id }}" value="{{ $datas->$id }}">
-    </div>
-    @endif
-  </div>
-  @error($id)
-  <div class="puplicError">{!! $message !!}</div>
-  @enderror
+  <!-- <p id="status">已上傳 0 張圖片</p> -->
 </div>
 {{-- css --}}
 @once
 @push('customStyle')
 <style>
-  /*publicImg 封面圖片*/
-  .publicImg {
-    width: 120px;
-    height: 120px;
-    border: 1px solid #ced4da;
-    position: relative;
-    display: inline-block;
-    flex: 0 0 120px;
+  .filemore {
+    flex-direction: column;
   }
 
-  .publicImg label {
-    width: 120px;
-    height: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  #dropZone {
+    border: 1px dashed #ced4da;
+    border-radius: 4px;
+    padding: 32px;
+    text-align: center;
+    margin-top: 16px;
+    transition: border-color 0.3s;
     cursor: pointer;
   }
 
-  .publicImg label span {
-    font-size: 12px;
-    letter-spacing: 1px;
+  #dropZone:hover,
+  #dropZone.dragover {
+    border-color: #4b5563;
   }
 
-  .publicImg input {
+  #dropZone p {
+    color: #a1a1a1;
+    margin: 0;
+  }
+
+  #fileInput {
     display: none;
   }
 
-  .publicImg .img {
-    width: 100%;
-    padding: 5px;
-    position: absolute;
-    top: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 118px;
+  #status {
+    color: #777;
   }
 
-  .publicImg .img img {
-    width: 100%;
-    height: auto;
-    max-width: 110px;
-    max-height: 110px;
-    object-fit: contain;
+  #preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
   }
 
-  .publicImg i {
+  .preview-item {
+    position: relative;
+  }
+
+  .preview-item img {
+    width: 100%;
+    height: 128px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .preview-item .delete-btn {
     position: absolute;
-    top: -6px;
-    right: -10px;
-    background: #fff;
+    padding: 4px;
+    top: 8px;
+    right: 8px;
+    background-color: #ef4444;
+    color: white;
     border-radius: 50%;
-    border: 1px solid #ced4da;
-    cursor: pointer;
-    width: 25px;
-    height: 25px;
-    padding: 5px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s;
+    cursor: pointer;
+    border: none;
   }
 
-  .publicImg i svg {
-    fill: #777;
+  .preview-item:hover .delete-btn {
+    opacity: 1;
   }
 </style>
 @endpush
@@ -853,255 +548,248 @@
 @once
 @push('customScript')
 <script>
-  window.creatHtml = function(o) {
-    var tage = o.tage || ''
-    var text = o.text || ''
-    var cl = o.cl || ''
-    var attr = o.attr || ''
-    var addHtml = o.addHtml || ''
-    var method = o.method || 'click'
-    var handler = o.handler || ''
-    var handler2 = o.handler2 || ''
-    var method2 = o.method2 || method
-    var html = document.createElement(tage)
-    if (text) {
-      html.innerHTML = text
-    }
-    if (cl) {
-      html.className = cl
-    }
-    if (attr) {
-      attr = Array.isArray(attr) ? attr : [attr]
-      attr.forEach((element) => {
-        Object.keys(element).forEach((item, i) => {
-          html.setAttribute(item, element[item])
-        })
-      })
-      // for(var i=0;i<attr.length;i++){
-      //     html.setAttribute(attr[i]['n'],attr[i]['v'])
-      // }
-    }
-    if (addHtml) {
-      addHtml = Array.isArray(addHtml) ? addHtml : [addHtml]
-      // console.log(addHtml)
-      addHtml.forEach(element => html.append(element))
-    }
-    if (handler) {
-      html.addEventListener(method, handler.bind(html), false)
-    }
-    if (handler2) {
-      window.addEventListener(method2, handler2, false)
-    }
-    return html;
-  }
-  window.fileMore = function(w, h) {
-    console.log('fileMore',w, h)
-    // console.log('id',{{$id}})
-    //console.log('imgFn')
-    var publicImg = document.querySelector('.fileMore');
-    var imgRemove = function(img) {
-      // publicImg.classList.remove('active')
-      img.remove();
-    }
-    var preview2 = function(input, imgWidth, imgHight, imgSize) {
-      //固定
-      var imgSizeNumber = imgSize * 1048576 //大小
-      var file = input.files[0];
-      var type = file.type.split('/')[1];
-      var idName = input.getAttribute('id');
-      var closeImg = function(obj) {
-        // obj.querySelector('.img').remove()
-        imgRemove(obj.querySelector('.img'))
-      }
-      var inImage = function(o) {
-        var publicImg = o.obj.closest(".publicImg");
-        if (publicImg.querySelector('img')) {
-          closeImg(publicImg)
-          // publicImg.querySelector('img').remove();
-        }
-        publicImg.classList.add('active');
-        publicImg.append(creatHtml({
-          'tage': 'div',
-          'cl': 'img',
-          'addHtml': [
-            creatHtml({
-              'tage': 'div',
-              'cl': 'imgDiv',
-              'addHtml': [
-                creatHtml({
-                  'tage': 'img',
-                  'attr': {
-                    'src': o.img
-                  },
-                }),
-              ]
-            }),
-            creatHtml({
-              'tage': 'i',
-              'text': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>',
-              'handler': function() {
-                closeImg(publicImg)
-                publicImg.classList.remove('active')
-                // publicImg.querySelector('.img').remove()
-                // o.obj.value='';
-              }
-            }),
-            creatHtml({
-              'tage': 'input',
-              'attr': {
-                'type': 'hidden',
-                'name': idName,
-                'value': o.img
-              },
-            }),
-          ]
-        }))
-      }
-      var file2Image = function(file, callback) {
-        var image = new Image();
-        var url = URL.createObjectURL(file);
-        image.onload = function() {
-          callback(image);
-          URL.revokeObjectURL(url);
+  window.filemore = function(maxWidth, maxHeight, maxSizeMB) {
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+    // const status = document.getElementById('status');
+    let files = [];
+
+    // 開啟檔案選擇器
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    // 拖放事件
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      handleFiles(e.dataTransfer.files);
+    });
+
+    // 檔案輸入事件
+    fileInput.addEventListener('change', () => {
+      handleFiles(fileInput.files);
+      fileInput.value = ''; // 清空輸入以允許重複選擇同一檔案
+    });
+
+    // 檢查並裁切圖片尺寸
+    async function resizeImage(file, maxWidth = 560, maxHeight = 350) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = maxWidth;
+          canvas.height = maxHeight;
+          const ctx = canvas.getContext('2d');
+
+          let width = img.width;
+          let height = img.height;
+          let offsetX = 0;
+          let offsetY = 0;
+
+          // 按比例放大填滿畫布（短邊至少等於目標尺寸）
+          const ratio = Math.max(maxWidth / width, maxHeight / height);
+          width = width * ratio;
+          height = height * ratio;
+
+          // 計算裁切偏移（居中）
+          offsetX = (width - maxWidth) / 2;
+          offsetY = (height - maxHeight) / 2;
+
+          // 繪製圖片，填滿畫布並裁切
+          ctx.drawImage(img, -offsetX, -offsetY, width, height);
+
+          // 轉換為 Blob
+          canvas.toBlob((blob) => resolve(blob), file.type, 1.0);
         };
-        image.src = url;
-      }
+        img.onerror = () => resolve(null);
+        img.src = URL.createObjectURL(file);
+      });
+    }
 
-      if (!(type == 'jpeg' || type == 'jpg' || type == 'png')) {
-        alert('錯誤 : 圖片類型只能是 jpg , jpeg , png');
-        input.value = '';
-        publicImg.classList.remove('active')
-        return;
-      }
+    // 壓縮圖片到 1MB 以下
+    async function compressImage(file, maxSizeMB = 1) {
+      let quality = 1.0;
+      let blob = file;
 
-      if (imgSizeNumber <= file.size) {
-        alert('錯誤 : 圖片大小需小於' + imgSize + 'M');
-        input.value = '';
-        publicImg.classList.remove('active')
-        return;
-      }
-
-      if (w) {
-        //依據格式自動切圖
-        file2Image(file, function(img) {
-          var canvas = document.createElement("canvas");
-          var context = canvas.getContext("2d");
-          if (imgWidth) {
-            canvas.width = imgWidth;
-            canvas.height = imgHight;
-            var imageWidth = img.width;
-            var imageHeight = img.height;
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            //背景白色
-            context.fillStyle = "white";
-            context.fillRect(0, 0, img.width, img.height);
-            if ((imageWidth / imgWidth) > (imageHeight / imgHight)) {
-              context.drawImage(img, imgWidth / 2 - (imgHight * imageWidth / imageHeight) / 2, 0, imgHight * imageWidth / imageHeight, imgHight);
-            } else {
-              context.drawImage(img, 0, imgHight / 2 - (imgWidth * imageHeight / imageWidth) / 2, imgWidth, imgWidth * imageHeight / imageWidth);
-            }
-          } else {
+      while (blob.size > maxSizeMB * 1024 * 1024 && quality > 0.1) {
+        quality -= 0.1;
+        blob = await new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
             canvas.width = img.width;
             canvas.height = img.height;
-            //背景白色
-            context.fillStyle = "white";
-            context.fillRect(0, 0, img.width, img.height);
-            //裁切圖片
-            context.drawImage(img, 0, 0, img.width, img.height);
-          }
-          //轉圖片
-          inImage({
-            'obj': input,
-            'img': canvas.toDataURL("image/jpeg", 0.9)
-          })
-        })
-      } else {
-        //不切圖
-        file2Image(file, function(img) {
-          var canvas = document.createElement("canvas");
-          var context = canvas.getContext("2d");
-          canvas.width = img.width;
-          canvas.height = img.height;
-          //背景白色
-          context.fillStyle = "white";
-          context.fillRect(0, 0, img.width, img.height);
-          //裁切圖片
-          context.drawImage(img, 0, 0, img.width, img.height);
-          //轉圖片
-          inImage({
-            'obj': input,
-            'img': canvas.toDataURL("image/jpeg", 1.0)
-          })
-        })
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            canvas.toBlob((newBlob) => resolve(newBlob), file.type, quality);
+          };
+          img.onerror = () => resolve(null);
+          img.src = URL.createObjectURL(file);
+        });
+        if (!blob) break;
       }
+      return blob;
     }
-    var cover = document.querySelector('#{{$id}}')
-    console.log('id',cover,'{{$id}}')
-    if (cover) {
-      console.log('cover',cover)
-      cover.addEventListener('change', function() {
-        console.log('change')
-        // publicImg.classList.add('active')
-        preview2(this, w, h, 1);
+
+    // 處理上傳的檔案
+    async function handleFiles(selectedFiles) {
+      const allowedTypes = ['image/jpeg', 'image/png'];
+      const allowedExtensions = ['.jpg', '.jpeg', '.png'];
+      const validFiles = [];
+      const ignoredFiles = [];
+      for (const file of Array.from(selectedFiles)) {
+        const extension = file.name.toLowerCase().match(/\.[^\.]+$/);
+        const isValidType = allowedTypes.includes(file.type);
+        const isValidExtension = extension && allowedExtensions.includes(extension[0]);
+
+        // 檢查 MIME 類型或副檔名
+        if (isValidType || isValidExtension) {
+          // 檢查尺寸並裁切
+          let processedFile = await resizeImage(file, maxWidth = 560, maxHeight = 350);
+          if (!processedFile) {
+            ignoredFiles.push(file.name);
+            console.error(`無法處理檔案: ${file.name}`);
+            continue;
+          }
+
+          // 檢查大小並壓縮
+          if (processedFile.size > 1024 * 1024) { // 大於 1MB
+            processedFile = await compressImage(processedFile, 1);
+            if (!processedFile) {
+              ignoredFiles.push(file.name);
+              console.error(`無法壓縮檔案: ${file.name}`);
+              continue;
+            }
+          }
+
+          // 將 Blob 轉回 File 物件並添加到 files 陣列
+          const newFile = new File([processedFile], file.name, {
+            type: file.type
+          });
+          validFiles.push(newFile);
+        } else {
+          ignoredFiles.push(file.name);
+        }
+      }
+
+      if (ignoredFiles.length > 0) {
+        // alert(`已忽略 ${ignoredFiles.length} 個不支援的檔案（僅接受 JPG 和 PNG）：${ignoredFiles.join(', ')}`);
+        alert(`僅接受 JPG 和 PNG`);
+      }
+      files.push(...validFiles);
+      // console.log('files',files)
+      // 更新 fileInput 的檔案列表
+      const dataTransfer = new DataTransfer();
+      files.forEach(f => dataTransfer.items.add(f));
+      fileInput.files = dataTransfer.files;
+      console.log('files', dataTransfer)
+      // updateStatus();
+      renderPreview();
+    }
+
+    // 更新狀態顯示
+    // function updateStatus() {
+    //   status.textContent = `已上傳 ${files.length} 張圖片`;
+    // }
+
+    // 刪除圖片
+    window.deleteImage = function(index) {
+      files.splice(index, 1);
+      const dataTransfer = new DataTransfer();
+      files.forEach(f => dataTransfer.items.add(f));
+      fileInput.files = dataTransfer.files;
+      renderPreview();
+    }
+
+    // 渲染預覽
+    async function renderPreview() {
+      preview.innerHTML = ''; // 清空預覽區域
+      const promises = files.map((file, index) => {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const div = document.createElement('div');
+            div.className = 'preview-item';
+            const img = document.createElement('img');
+            if (file.id) {
+              img.src = e.target.result;
+            } else {
+              img.src = e.target.result;
+
+            }
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.innerHTML = `<svg viewBox="0 0 24 24">
+                  <path d="M6 18L18 6M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>`;
+            deleteBtn.addEventListener('click', () => deleteImage(index));
+            div.appendChild(img);
+            div.appendChild(deleteBtn);
+            resolve(div);
+          };
+          reader.onerror = () => {
+            console.error(`無法讀取檔案: ${file.name}`);
+            resolve(null); // 跳過錯誤檔案
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+
+      const elements = (await Promise.all(promises)).filter(el => el !== null);
+      elements.forEach(el => preview.appendChild(el));
+      console.log('files2', files)
+      // updateStatus();
+    }
+
+    //有圖片綁刪除
+    @if(isset($datas2))
+    var previewItem = preview.querySelectorAll('.preview-item');
+    if (previewItem.length) {
+      //綁初始值
+      const datas2 = @json($datas2);
+      Promise.all(
+        datas2.map((data, index) => {
+          const coverUrl = "{{ URL::asset('images') }}" + '/' + data.cover + '?' + Math.random();
+          return fetch(coverUrl)
+            .then(res => res.blob())
+            .then(blob => {
+              const file = new File([blob], data.cover, {
+                type: blob.type
+              })
+              file.id = data.id
+              return file;
+            })
+        })
+      ).then(filesValue => {
+        //給files 
+        files.push(...filesValue);
+        //給files input
+        const dataTransfer = new DataTransfer();
+        filesValue.forEach(f => dataTransfer.items.add(f));
+        fileInput.files = dataTransfer.filesValue;
+      });
+
+      //綁刪除
+      previewItem.forEach((btn, index) => {
+        btn.querySelector('.delete-btn').addEventListener('click', function() {
+          deleteImage(index)
+        })
       })
     }
-    var img = publicImg.querySelector('.img');
-    if (img) {
-      var i = publicImg.querySelector('i');
-      if (i) {
-        i.addEventListener('click', function() {
-          console.log('i click')
-          publicImg.classList.remove('active')
-          imgRemove(img)
-        })
-      }
-    }
+    @endif
   }
 </script>
 @endpush
 @endonce
-@elseif ($type=='appendix')
-<!-- 多檔上傳下載 -->
-<div class="appendix" data-target="fileDiv">
-  <label data-target='add'>
-    {{ $label }}
-    @if(isset($require))<span class="puplicRequired">*</span>@endif
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 309.059 309.059">
-      <path style="fill:currentColor;" d="M280.71,126.181h-97.822V28.338C182.889,12.711,170.172,0,154.529,0S126.17,12.711,126.17,28.338    v97.843H28.359C12.722,126.181,0,138.903,0,154.529c0,15.621,12.717,28.338,28.359,28.338h97.811v97.843    c0,15.632,12.711,28.348,28.359,28.348c15.643,0,28.359-12.717,28.359-28.348v-97.843h97.822    c15.632,0,28.348-12.717,28.348-28.338C309.059,138.903,296.342,126.181,280.71,126.181z" />
-    </svg>
-  </label>
-  <div class="input">
-    <ul>
-      @if(isset($appendixs))
-      @foreach ($appendixs as $appendix)
-      <li>
-        <div>{{$appendix->name}}</div>
-        <!-- <a data-target='add'>新增</a> -->
-        <a data-target='minus' data-id='{{$appendix->id}}'>刪除</a>
-      </li>
-      @endforeach
-      @else
-      <li>
-        <div><input type="file" name="file[]" data-target='file'></div>
-        <!-- <a data-target='add'>新增</a> -->
-        <a data-target='minus'>刪除</a>
-      </li>
-      @endif
-    </ul>
-  </div>
-</div>
-@elseif ($type=='fn_appendix')
-<!-- 前端顯示多檔上傳下載 -->
-<div class="appendix">
-  <p>附件下載</p>
-  <ul>
-    @foreach ($appendixs as $appendix)
-    <li>
-      <a href="{{ Storage::url(str_replace('public/','',$appendix->src)) }}" download="{{$appendix->name}}">{{$appendix->name}}</a>
-    </li>
-    @endforeach
-  </ul>
-</div>
 @elseif ($type=='release')
 {{-- html --}}
 <label>{{ $label }}@if(isset($require))<span class="puplicRequired">*</span>@endif</label>

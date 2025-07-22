@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\CustomFn;
 //db
 use App\Models\Work;
+use App\Models\Workmore;
 
 class BaworkController extends Controller
 {
@@ -21,9 +22,9 @@ class BaworkController extends Controller
     ['type' => 'file', 'id' => 'cover', 'label' => '作品封面'],
     ['type' => 'text', 'id' => 'title', 'label' => '作品標題'],
     ['type' => 'text', 'id' => 'name', 'label' => '作品副標'],
-    ['type' => 'select', 'id' => 'class', 'label' => '作品類型','options'=>array('1'=>'修繕案例','2'=>'重建案例')],
+    ['type' => 'select', 'id' => 'class', 'label' => '作品類型', 'options' => array('1' => '修繕案例', '2' => '重建案例')],
     ['type' => 'release', 'id' => 'release', 'label' => '作品狀態'],
-    ['type' => 'file10', 'id' => 'file', 'label' => '內頁作品'],
+    ['type' => 'filemore', 'id' => 'filemore', 'label' => '內頁作品'],
   );
   //要驗證的值
   public $validate = [
@@ -32,9 +33,16 @@ class BaworkController extends Controller
     'name' => 'required|max:10',
     'class' => 'required',
     'release' => 'required|in:y,n',
+    // 'filemore.*' => 'image|mimes:jpeg,png|max:2048', // 限制 JPEG/PNG，最大 2MB
+    'filemore.*' => 'image|mimes:jpeg,png', // 限制 JPEG/PNG
   ];
+  // public function filemoreImgSave ()
+  // {
+
+  // }
   public function search()
   {
+
     $result = CustomFn::search($this->result['main_db']::count(), $this->result['end'], $this->result['pageNow']);
     $datas = $this->result['main_db']::offset($result['startValue'])->limit($result['endValue'])->orderBy('id', 'desc')->get();
     $this->result['datas'] =  $datas;
@@ -49,7 +57,7 @@ class BaworkController extends Controller
     $input = $request->validate($this->validate);
 
     // save
-    $this->result['main_db']::create([
+    $db = $this->result['main_db']::create([
       'cover' => CustomFn::imgAdd($input['cover'], 'baworks'),
       'title' => $input['title'],
       'name' => $input['name'],
@@ -57,26 +65,59 @@ class BaworkController extends Controller
       'release' => $input['release'],
     ]);
 
+    //filemore save
+    foreach ($input['filemore'] as $index => $file) {
+      $imgName =  'baworkmore' . time() . $index . '.jpg'; //圖片名子
+      $path = base_path() . '/public/images/' . $imgName; //圖片路徑
+      $binaryData = file_get_contents($file); //讀二進位
+      file_put_contents($path, $binaryData);
+      Workmore::create([
+        'work_id' => $db->id,
+        'cover' => $imgName,
+      ]);
+    }
+
     return redirect($this->result['viewName']);
   }
   public function updatepost(Request $request)
   {
-    //接收驗證資料 需濾掉password
-    // unset($this->validate["password"]);
-    // dd($this->validate);
+    //接收驗證資料 
     $input = $request->validate($this->validate);
 
     //save
     $data = $this->result['main_db']::find($this->result['main_id']);
-    $imgUpdata = CustomFn::imgUpdata($input['cover'],$data,'baworks');
-    if($imgUpdata){
-        $data->cover = $imgUpdata;
+    $imgUpdata = CustomFn::imgUpdata($input['cover'], $data, 'baworks');
+    if ($imgUpdata) {
+      $data->cover = $imgUpdata;
     }
     $data->title = $input['title'];
     $data->name = $input['name'];
     $data->class = $input['class'];
     $data->release = $input['release'];
     $data->save();
+
+
+    //filemore 全圖刪除
+    $Workmores = Workmore::where('work_id', $this->result['main_id'])->get();
+    foreach ($Workmores as $Workmore) {
+      CustomFn::imgDelet($Workmore);
+      //filemore 表刪除
+      $Workmore->delete();
+    }
+
+    //filemore save
+    if(isset($input['filemore'])){
+      foreach ($input['filemore'] as $index => $file) {
+        $imgName =  'baworkmore' . time() . $index . '.jpg'; //圖片名子
+        $path = base_path() . '/public/images/' . $imgName; //圖片路徑
+        $binaryData = file_get_contents($file); //讀二進位
+        file_put_contents($path, $binaryData);
+        Workmore::create([
+          'work_id' => $this->result['main_id'],
+          'cover' => $imgName,
+        ]);
+      }
+    }
 
     //回到更新頁
     return redirect($this->result['viewName']);
@@ -122,6 +163,7 @@ class BaworkController extends Controller
     $this->result['active'] = 'baworks_update';
     $this->result['mainTitle'] = '上傳作品_修改';
     $this->result['datas'] = Work::find($id);
+    $this->result['datas2'] = Workmore::where('work_id', $id)->get();
     $this->result['forms'] = $this->forms;
     return view('baworks_update', $this->result);
   }
@@ -140,6 +182,14 @@ class BaworkController extends Controller
     $data = Work::find($id);
     CustomFn::imgDelet($data);
     $data->delete();
+
+    //filemore 全圖刪除
+    $Workmores = Workmore::where('work_id', $id)->get();
+    foreach ($Workmores as $Workmore) {
+      CustomFn::imgDelet($Workmore);
+      //filemore 表刪除
+      $Workmore->delete();
+    }
 
     return redirect('baworks/' . $pageId);
   }

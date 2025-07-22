@@ -7,6 +7,6 @@
 @include('layouts.bacontent_update',['forms'=>$forms])
 <script>
   imgFn(560, 350)
-  fileMore(560, 350)
+  filemore(560, 350)
 </script>
 @endsection
