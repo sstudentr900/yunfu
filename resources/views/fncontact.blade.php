@@ -53,7 +53,7 @@
             </label>
             <label class="cursor-pointer flex items-center justify-center rounded-md bg-white p-2 uppercase ring-1 ring-gray-300 not-data-focus:not-has-checked:ring-inset hover:bg-gray-50 has-checked:bg-main has-checked:text-white has-checked:ring-0 has-checked:hover:bg-main/80 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-main data-focus:ring-2 data-focus:ring-main data-focus:ring-offset-2 data-focus:has-checked:ring-2 max-md:p-1">
               <input class="sr-only" type="radio" value="friend" name="inputwhere">
-              <span class="text-center leading-4 max-w-[40px]">朋友介紹</span>
+              <span class="text-center leading-4 max-w-[40px]">朋友</span>
             </label>
             <label class="cursor-pointer flex items-center justify-center rounded-md bg-white p-2 uppercase ring-1 ring-gray-300 not-data-focus:not-has-checked:ring-inset hover:bg-gray-50 has-checked:bg-main has-checked:text-white has-checked:ring-0 has-checked:hover:bg-main/80 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-main data-focus:ring-2 data-focus:ring-main data-focus:ring-offset-2 data-focus:has-checked:ring-2 max-md:p-1">
               <input class="sr-only" type="radio" value="other" name="inputwhere">

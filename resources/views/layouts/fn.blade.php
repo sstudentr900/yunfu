@@ -12,7 +12,7 @@
           <a href="{{ route('fnhome') }}" class="w-[190px] h-[180px] bg-main flex justify-center items-center max-lg:max-w-[82px] max-lg:h-[120px] ">
             <img src="{{url('/images/logo.svg')}}" alt="">
           </a>
-          <div class="w-[95px] mt-18 flex flex-col justify-center gap-4 text-2xl tracking-tight text-neutral-500 max-lg:mt-0 max-lg:w-[150px] max-lg:flex-row max-lg:flex-wrap max-lg:text-white/70 max-lg:text-base max-lg:mr-4 max-lg:gap-x-6 max-lg:gap-y-3">
+          <div class="mt-20 flex flex-col justify-center gap-4 text-xl tracking-tight text-neutral-500 max-lg:mt-0 max-lg:w-[150px] max-lg:flex-row max-lg:flex-wrap max-lg:text-white/70 max-lg:text-base max-lg:mr-4 max-lg:gap-x-6 max-lg:gap-y-3">
             <a href="{{ route('fnhome') }}" class="hover:text-main max-lg:hover:text-white {{ request()->routeIs('fnhome') ? 'text-main max-lg:text-white' : '' }}">耘馥首頁</a>
             <a href="{{ route('fnabout') }}" class="hover:text-main max-lg:hover:text-white {{ request()->routeIs('fnabout') ? 'text-main max-lg:text-white' : '' }}">關於我們</a>
             <a href="{{ route('fncustomization') }}" class="hover:text-main max-lg:hover:text-white {{ request()->routeIs('fncustomization') ? 'text-main max-lg:text-white' : '' }}">專屬客製</a>

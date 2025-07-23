@@ -15,7 +15,7 @@ class BaworkController extends Controller
 {
   //共用
   public $result = [
-    'end' => 8, //顯示數量
+    'end' => 7, //顯示數量
     'release' => 'y',
   ];
   public $forms = array(
@@ -65,27 +65,31 @@ class BaworkController extends Controller
       'release' => $input['release'],
     ]);
 
-    //filemore save
-    foreach ($input['filemore'] as $index => $file) {
-      $imgName =  'baworkmore' . time() . $index . '.jpg'; //圖片名子
-      $path = base_path() . '/public/images/' . $imgName; //圖片路徑
-      $binaryData = file_get_contents($file); //讀二進位
-      file_put_contents($path, $binaryData);
-      Workmore::create([
-        'work_id' => $db->id,
-        'cover' => $imgName,
-      ]);
+    if (isset($input['filemore'])) {
+      //filemore save
+      foreach ($input['filemore'] as $index => $file) {
+        $imgName =  'baworkmore' . time() . $index . '.jpg'; //圖片名子
+        $path = base_path() . '/public/images/' . $imgName; //圖片路徑
+        $binaryData = file_get_contents($file); //讀二進位
+        file_put_contents($path, $binaryData);
+        Workmore::create([
+          'work_id' => $db->id,
+          'cover' => $imgName,
+        ]);
+      }
     }
 
     return redirect($this->result['viewName']);
   }
   public function updatepost(Request $request)
   {
+
     //接收驗證資料 
     $input = $request->validate($this->validate);
 
     //save
     $data = $this->result['main_db']::find($this->result['main_id']);
+    // dd('input', $input,$data);
     $imgUpdata = CustomFn::imgUpdata($input['cover'], $data, 'baworks');
     if ($imgUpdata) {
       $data->cover = $imgUpdata;
@@ -96,17 +100,16 @@ class BaworkController extends Controller
     $data->release = $input['release'];
     $data->save();
 
-
-    //filemore 全圖刪除
-    $Workmores = Workmore::where('work_id', $this->result['main_id'])->get();
-    foreach ($Workmores as $Workmore) {
-      CustomFn::imgDelet($Workmore);
-      //filemore 表刪除
-      $Workmore->delete();
-    }
-
+    // dd('isset', $input, isset($input['filemore']));
     //filemore save
-    if(isset($input['filemore'])){
+    if (isset($input['filemore'])) {
+      //filemore 全圖刪除
+      $Workmores = Workmore::where('work_id', $this->result['main_id'])->get();
+      foreach ($Workmores as $Workmore) {
+        CustomFn::imgDelet($Workmore);
+        //filemore 表刪除
+        $Workmore->delete();
+      }
       foreach ($input['filemore'] as $index => $file) {
         $imgName =  'baworkmore' . time() . $index . '.jpg'; //圖片名子
         $path = base_path() . '/public/images/' . $imgName; //圖片路徑

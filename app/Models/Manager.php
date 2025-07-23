@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Manager extends Model
+class Manager extends Authenticatable
 {
   //資料表名稱
   protected $table = 'manager';
@@ -21,4 +22,17 @@ class Manager extends Model
     'phone',
     'release',
   ];
+  protected $hidden = [
+      'password',
+  ];
+
+  protected $casts = [
+      'password' => 'hashed', // 自動處理密碼雜湊
+  ];
+
+  // 自定義身份驗證標識欄位
+  public function getAuthIdentifierName()
+  {
+      return 'account'; // 使用 account 進行驗證
+  }
 }

@@ -88,8 +88,8 @@
         <img src="{{ $imgSrc }}" alt="">
       </div>
       <i>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path>
+        <svg viewBox="0 0 24 24">
+          <path d="M6 18L18 6M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
       </i>
       <input type="hidden" name="{{ isset($name)?$name:$id }}" value="{{ old($id) }}">
@@ -104,8 +104,8 @@
         <img src="{{ $imgSrc }}" alt="">
       </div>
       <i>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path>
+        <svg viewBox="0 0 24 24">
+          <path d="M6 18L18 6M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
       </i>
       <input type="hidden" name="{{ isset($name)?$name:$id }}" value="{{ $datas->$id }}">
@@ -286,7 +286,7 @@
           ctx.drawImage(img, -offsetX, -offsetY, width, height);
 
           // 轉換為 Blob
-          canvas.toBlob((blob) => resolve(blob), file.type, 1.0);
+          canvas.toBlob((blob) =>resolve(blob), 'image/jpeg', 1.0);
         };
         img.onerror = () => resolve(null);
         img.src = URL.createObjectURL(file);
@@ -308,7 +308,7 @@
             canvas.height = img.height;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0);
-            canvas.toBlob((newBlob) => resolve(newBlob), file.type, quality);
+            canvas.toBlob((newBlob) => resolve(newBlob), 'image/jpeg', quality);
           };
           img.onerror = () => resolve(null);
           img.src = URL.createObjectURL(file);
@@ -395,16 +395,18 @@
       //   console.error(`無法處理檔案: ${file.name}`);
       //   continue;
       // }
+      console.log('尺寸', processedFile)
 
       // 檢查大小並壓縮
-      if (processedFile.size > 1024 * 1024) { // 大於 1MB
-        processedFile = await compressImage(processedFile, 1);
-        //   if (!processedFile) {
-        //     ignoredFiles.push(file.name);
-        //     console.error(`無法壓縮檔案: ${file.name}`);
-        //     continue;
-        //   }
-      }
+      // if (processedFile.size > 1024 * 1024) { // 大於 1MB
+      // processedFile = await compressImage(processedFile, 1);
+      //   if (!processedFile) {
+      //     ignoredFiles.push(file.name);
+      //     console.error(`無法壓縮檔案: ${file.name}`);
+      //     continue;
+      //   }
+      // }
+      console.log('大小', processedFile)
 
       // console.log('processedFile', processedFile)
       const reader = new FileReader();
@@ -439,7 +441,7 @@
   }
 </script>
 @endpush
-@endonce
+@endonce 
 @elseif ($type=='filemore')
 {{-- 多圖上傳 --}}
 <label>{{ $label }}@if(isset($require))<span class="puplicRequired">*</span>@endif</label>
@@ -769,13 +771,13 @@
               return file;
             })
         })
-      ).then(filesValue => {
+      ).then(validFiles => {
         //給files 
-        files.push(...filesValue);
+        files.push(...validFiles);
         //給files input
-        const dataTransfer = new DataTransfer();
-        filesValue.forEach(f => dataTransfer.items.add(f));
-        fileInput.files = dataTransfer.filesValue;
+        // const dataTransfer = new DataTransfer();
+        // files.forEach(f => dataTransfer.items.add(f));
+        // fileInput.files = dataTransfer.files;
       });
 
       //綁刪除
