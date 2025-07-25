@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-tw">
+<html lang="zh-tw"  data-page="{{ Route::currentRouteName() }}">
 <head>
   @include('layouts.public_head')
   @vite(['resources/css/app.css', 'resources/js/app.js'])

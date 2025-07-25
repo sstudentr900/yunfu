@@ -2,9 +2,9 @@
 @section('content')
 <!-- Carousel -->
 <div class="homeSlick1 md:mb-18 max-md:mb-8">
-  <div><img class="w-full object-center" src="{{url('/images/indexcarousel01.png')}}" alt=""></div>
-  <div><img class="w-full object-center" src="{{url('/images/indexcarousel02.png')}}" alt=""></div>
-  <div><img class="w-full object-center" src="{{url('/images/indexcarousel03.png')}}" alt=""></div>
+  <div><img src="{{url('/images/indexcarousel01.png')}}" alt=""></div>
+  <div><img src="{{url('/images/indexcarousel02.png')}}" alt=""></div>
+  <div><img src="{{url('/images/indexcarousel03.png')}}" alt=""></div>
 </div>
 <!-- company -->
 <div class="flex jusify-center items-center m-auto mb-24 gap-16 max-w-7xl max-[1420px]:items-start max-[1420px]:-mb-18 max-2xl:gap-8 md:px-8 max-lg:px-4 max-md:flex-col max-md:max-w-[580px] max-md:mb-8 max-sm:gap-4">
@@ -30,7 +30,7 @@
     <img class="max-w-[390px] w-full" src="{{url('/images/indexcompany04.png')}}" alt="">
   </div> -->
 </div>
-<!-- ad max-w-[980px] max-w-[480px]-->
+<!-- ad -->
 <div class="relative z-20 mb-18 flex justify-center p-16 pt-0 bg-linear-to-b from-white from-50% to-[#736156] to-50% max-md:px-0 max-md:from-20% max-md:to-20%">
   <div class="flex justify-center items-end relative max-w-7xl px-8 max-xl:px-0 max-md:flex-col max-md:items-start">
     <div class="flex-1 max-md:pl-20">
@@ -57,7 +57,7 @@
 </div>
 @include('layouts.fnservices')
 <!-- work -->
-<div class="flex flex-col pr-8 max-lg:px-8 max-md:px-4">
+<div class="work flex flex-col pr-8 max-lg:px-8 max-md:px-4">
   <div class="flex justify-between items-center mb-4">
     <div class="inline-flex flex-col justify-start items-start">
       <div class="text-main justify-center text-2xl max-md:text-lg">精選作品</div>

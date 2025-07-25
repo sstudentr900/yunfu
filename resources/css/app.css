@@ -7,6 +7,9 @@
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 body{
   font-family: "Chiron Hei HK", sans-serif;
   /* font-optical-sizing: auto;
@@ -52,7 +55,26 @@ body{
 .customTable .modifyDiv{
   flex: 0 0 110px;
 }
-/*後臺表單*/
+/*後臺表單 bacontact css*/
+.bacontact .bacontentserch>div>div p{
+  /* 強制換行 */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+.bacontact .bacontentserch>div>div.nameDiv{
+  flex: 0 0 100px;
+}
+.bacontact .bacontentserch>div>div.emailDiv{
+  flex: 0 0 200px;
+}
+.bacontact .bacontentserch>div>div.sourceDiv{
+  flex: 0 0 60px;
+}
+.bacontact .bacontentserch>div>div.modifyDiv{
+  flex: 0 0 60px;
+}
+/*後臺表單 錯誤訊息*/
 .puplicError {
   font-size: 12px;
   font-family: 'Noto Sans TC', sans-serif;
@@ -64,4 +86,30 @@ body{
   position: absolute;
   left: 4px;
   bottom: -16px;
+}
+/* 自定義提示訊息樣式 */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #28a745;
+  color: white;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+.toast.show {
+  opacity: 1;
+}
+@media(max-width: 1023px){ 
+  .toast {
+    top: 160px;
+  }
+}
+/*前台首頁*/
+.fnhome .homeSlick1 img {
+  @apply w-full object-center;
 }

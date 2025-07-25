@@ -5,10 +5,18 @@ use App\Http\Controllers\{
   BamanagerController,
   BaloginController,
   BaworkController,
+  BacontactController,
   FnhomeController,
   FnworksController,
   FnworkmoreController,
+  FncontactController,
+  //驗證碼測試
+  // MyFormController
 };
+//發送郵件測試
+// use Illuminate\Support\Facades\Mail;
+// use App\Mail\DemoMail;
+
 
 //前台
 // Route::view('/', 'fnhome')->name('fnhome');
@@ -22,7 +30,22 @@ Route::view('customization', 'fncustomization')->name('fncustomization');
 Route::get('works/{class?}', [FnworksController::class, 'fnworks'])->name('fnworks');
 Route::get('workmore/{id}', [FnworkmoreController::class, 'fnworkmore'])->name('fnworkmore');
 Route::view('service', 'fnservice')->name('fnservice');
+//聯絡我們
 Route::view('contact', 'fncontact')->name('fncontact');
+// Route::get('contact', [FncontactController::class, 'fncontact'])->name('fncontact');
+Route::post('contact', [FncontactController::class, 'fncontact_post'])->name('fncontact_post');
+//驗證碼測試
+// Route::get('/form', [MyFormController::class, 'showForm'])->name('form.show');
+// Route::post('/form', [MyFormController::class, 'submitForm'])->name('form.submit');
+//發送郵件測試
+// Route::get('/send-mail', function () {
+//   $mailData = [
+//     'name' => '測試用戶'
+//   ];
+//   Mail::to('recipient@example.com')->send(new DemoMail($mailData));
+//   return '郵件已發送！';
+// });
+
 
 
 //後台登入
@@ -46,7 +69,11 @@ Route::middleware('auth.custom')->group(function () {
   Route::get('baworks_update/{id?}/{pageId?}', [BaworkController::class, 'baworks_update'])->name('baworks_update');
   Route::post('baworks_update/{id?}/{pageId?}', [BaworkController::class, 'baworks_updatepost'])->name('baworks_update');
   Route::get('baworks_delete/{id?}/{pageId?}', [BaworkController::class, 'baworks_delete'])->name('baworks_delete');
+  //聯絡我們
+  Route::get('bacontact/{id?}', [BacontactController::class, 'bacontact_search'])->name('bacontact');
 });
+
+
 
 // 404 回首頁
 Route::fallback(function () {
@@ -55,6 +82,6 @@ Route::fallback(function () {
 //測試
 Route::get('/test', function () {
   // 前台特效
-  // 前台聯絡我們
+  // 資料庫關聯
   return 'test';
 });

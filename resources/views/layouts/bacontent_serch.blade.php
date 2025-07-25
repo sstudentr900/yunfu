@@ -1,4 +1,4 @@
-<div class="p-6 flex flex-col gap-4 text-sm">
+<div class="bacontentserch p-6 flex flex-col gap-4 text-sm">
   <div class="customTable flex border-b border-neutral-300 text-neutral-800 font-bold">
     @foreach($forms as $form)
     <div class="{{ $form['name'].'Div' }}">
@@ -34,9 +34,7 @@
   <div class="customTable flex border-b border-neutral-300 text-neutral-500">
     @foreach($forms as $form)
     <div class="{{ $form['name'].'Div' }}">
-      {{--@php
-          print_r($data);
-        @endphp--}}
+      {{--@php print_r($data); @endphp--}}
       @if ($form['type']=='img')
       <img src="{{ URL::asset('images').'/'.$data[$form['name']].'?'.rand() }}">
       @elseif ($form['type']=='release')
@@ -49,7 +47,7 @@
     </div>
     @endforeach
     {{-- <div class='idDiv'>
-      <p>{{ $data->id }}</p>
+    <p>{{ $data->id }}</p>
   </div>
   <div class='updatedDiv'>
     <p>{{ $data->updated_at }}</p>

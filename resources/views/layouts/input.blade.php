@@ -800,7 +800,7 @@
     <div class="radio">
       <!-- datas來源資料 release 預設 -->
       <input type="radio" id="y" name="{{ isset($name)?$name:$id }}" value="y"
-        @if( old('release')=='y' || isset($datas) && !empty($datas) && $datas->release == 'y' || $release && $release== 'y')
+      @if( old('release')=='y' || isset($datas) && !empty($datas) && $datas->release == 'y' || $release && $release== 'y')
       checked
       @endif
       >

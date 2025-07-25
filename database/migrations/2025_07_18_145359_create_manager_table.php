@@ -15,7 +15,7 @@ return new class extends Migration
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_general_ci';
             $table->increments('id');
-            $table->string('cover','100')->comment('圖片');
+            $table->string('cover','100')->comment('圖片')->default('error.jpg');
             $table->string('account','50')->comment('帳號');
             $table->string('password','100')->comment('密碼');
             $table->string('name','20')->comment('名稱');
