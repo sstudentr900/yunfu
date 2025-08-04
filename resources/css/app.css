@@ -15,6 +15,7 @@ body{
   /* font-optical-sizing: auto;
   font-weight: <weight>;
   font-style: normal; */
+ 
 }
 .customFont2{
   font-family: "Chiron Sung HK", sans-serif;
@@ -87,7 +88,7 @@ body{
   left: 4px;
   bottom: -16px;
 }
-/* 自定義提示訊息樣式 */
+/* 前臺聯絡我們-自定義提示訊息樣式 */
 .toast {
   position: fixed;
   top: 20px;
@@ -109,7 +110,163 @@ body{
     top: 160px;
   }
 }
+/*前台特效-掃光*/
+.effects_sweeplight{
+  overflow: hidden;
+  position: relative;
+}
+.effects_sweeplight:after{
+  background: #fff;
+  content: "";
+  height: 200%;
+  left: -80%;
+  opacity: 0.1;
+  position: absolute;
+  top: -50%;
+  transform: rotate(35deg);
+  transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  width: 50px;
+  z-index: 10;
+}
+.effects_sweeplight:hover:after {
+  left: 150%;
+  transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+/*前台特效-掃光*/
+.effects_holo{
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  /* 平滑傾斜過渡 */
+  /* transition: transform 0.2s ease;  */
+   /* 啟用 3D 變換 */
+  /* transform-style: preserve-3d; */
+  /* 為 3D 效果添加透視 */
+  /* perspective: 500px;  */
+  /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); */
+}
+.effects_holo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* background: radial-gradient(
+      circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(255, 255, 255, 0.3) 0%,
+      rgba(255, 255, 255, 0) 60%
+  );
+  background: radial-gradient(
+      circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(255, 255, 255, 0.2) 0%,
+      transparent 60%
+  ); */
+  background: radial-gradient(
+      circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(255, 255, 255, 0.2) 0%,
+      transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.effects_holo.hovered::before {
+  opacity: 1;
+}
+/*前台選單*/
+#menuToggle {
+  flex-direction: column;
+  position: relative;
+  gap:5px;
+  z-index: 50;
+  -webkit-user-select: none;
+  user-select: none;
+  width: 40px;
+  height: 16px;
+  margin: 24px;
+  cursor: pointer;
+}
+#menuToggle span{
+  display: flex;
+  /* width: 29px; */
+  width: 100%;
+  height: 2px;
+  /* margin-bottom: 5px; */
+  position: relative;
+  background: #737373;
+  border-radius: 3px;
+  z-index: 1;
+  /* transform-origin: 5px 0px; */
+  transform-origin: center center;
+  transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+              background 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+              opacity 0.55s ease;
+}
+#menuToggle span:first-child{
+  /* transform-origin: 0% 0%; */
+  transform-origin: center center
+}
+#menuToggle span:nth-last-child(2){
+  /* transform-origin: 0% 100%; */
+  transform-origin: center center
+}
+#menuToggle.active span{
+  opacity: 1;
+  /* transform: rotate(45deg) translate(-3px, -1px); */
+  transform: rotate(45deg) translate(0, 0);
+  background: #36383F;
+}
+#menuToggle.active span:nth-last-child(3){
+  opacity: 0;
+  transform: rotate(0deg) scale(0.2, 0.2);
+}
+#menuToggle.active span:nth-last-child(2){
+  /* transform: rotate(-45deg) translate(0, -1px); */
+  transform: rotate(-45deg) translate(-4px, 3px);
+}
+#menuToggle.active+.gsapNavTextBottom{
+  left: 0;
+  /* opacity: 1; */
+  /* transition: left 0.3s ease, opacity 0.3s ease; */
+  /* transition: left 0.3s ease; */
+}
+#menuToggle+.gsapNavTextBottom{
+  left: -100vw;
+  /* opacity: 0; */
+  /* opacity 延遲 0.3s */
+  /* transition: left 0.3s ease, opacity 0.3s ease 0.4s; */
+  transition: left 0.3s ease-in-out; 
+}
 /*前台首頁*/
+/* .fnhome .homeSlick1>div{
+  aspect-ratio: 70 / 31;
+  overflow: hidden;
+  background-color: #f0f0f0;
+}  */
 .fnhome .homeSlick1 img {
-  @apply w-full object-center;
+  @apply w-full object-cover max-md:h-[320px];
+}
+/*gsap*/
+.gsapImg{
+  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+}
+/*gsa首頁輪播*/
+.gsapCarousel{
+  overflow: hidden;
+}
+.gsapCarousel>div{
+  opacity: 0;
+  transform: scale(1.05);
+  animation: fadeScale 1.2s ease-in-out forwards;
+}
+/* 定義動畫 keyframes */
+@keyframes fadeScale {
+  0% {
+      opacity: 0;
+      transform: scale(1.05); /* 起始放大 1.2 倍 */
+  }
+  100% {
+      opacity: 1;
+      transform: scale(1); /* 最終正常大小 */
+  }
 }

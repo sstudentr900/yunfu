@@ -1,14 +1,12 @@
 @extends('layouts.fn')
 @section('content')
 <!-- Carousel -->
-<div class="md:mb-18 max-md:mb-8 relative">
-  <img class="w-full object-center object-cover max-md:min-h-[200px] max-h-[400px]" src="{{url('/images/contact01.png')}}" alt="">
-  <div class="absolute inset-0 flex flex-col items-center justify-center">
-    <div class="text-white customFont3 text-7xl uppercase max-md:text-5xl">CONTACT</div>
-    <div class="text-white text-2xl max-md:text-base">聯絡我們</div>
-  </div>
-</div>
-<div class="m-auto mb-24 px-8 relative max-w-7xl max-md:px-4">
+@include('layouts.fncarousel', [
+  'text_tw' => '聯絡我們',
+  'text_en' => 'CONTACT',
+  'url' => url('/images/contact01.png'),
+])
+<div class="gsapTop m-auto mb-24 px-8 relative max-w-7xl max-md:px-4">
   <div class="flex flex-col mb-18 max-md:mb-8">
     <div class="text-main text-2xl max-md:text-lg">立即填寫預約表單・專人一對一諮詢</div>
     <div class="justify-center text-neutral-800 text-7xl customFont3 uppercase max-sm:text-5xl">Online Form</div>
@@ -101,13 +99,7 @@
     </div>
   </form>
 </div>
-<!-- JavaScript 動態生成 Toast 表單送出成功-->
-@if (session('success'))
-<script>
-  window.sessionSuccess = "{{ session('success') }}";
-</script>
-@endif
-<div class="relative">
+<div class="gsapTop relative">
   <img class="w-full object-center object-cover h-[480px] max-lg:h-[320px]" src="{{url('/images/indexcontact01.png')}}" alt="">
   <div class="absolute inset-0 flex flex-col items-center justify-center gap-4 p-4 max-md:gap-2">
     <div class="customFont3 text-center text-white text-6xl uppercase max-md:text-4xl">WORKS</div>
@@ -121,4 +113,10 @@
     </a>
   </div>
 </div>
+<!-- JavaScript 動態生成 Toast 表單送出成功-->
+@if (session('success'))
+<script>
+  window.sessionSuccess = "{{ session('success') }}";
+</script>
+@endif
 @endsection

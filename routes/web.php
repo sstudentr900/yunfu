@@ -79,9 +79,27 @@ Route::middleware('auth.custom')->group(function () {
 Route::fallback(function () {
   return redirect()->route('fnhome');
 });
-//測試
-Route::get('/test', function () {
-  // 前台特效
-  // 資料庫關聯
-  return 'test';
-});
+
+
+
+//測試test
+// Route::get('/test', function () {
+//   // 前台特效
+//   return 'test';
+// });
+Route::view('/test', 'test')->name('test');
+//測試Flights
+// use App\Models\Flights;
+// Route::get('/Flights', function () {
+//   //取資料
+//   $Flights = Flights::with('posts')->get();
+//   return compact('Flights');
+// });
+// Route::get('/FlightsCreate', function () {
+//   //存資料
+//   $Flights = Flights::find(71);
+//   $Flights->posts()->create([
+//     'title' => 'title71',
+//     'content' => 'content71',
+//   ]);
+// });
